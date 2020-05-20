@@ -62,10 +62,10 @@ int main(int argc, char *argv[])
                 strcpy(memory_allo, optarg);  
                 break;
             case 's':
-                printf("%d\n", atoi(optarg));
+                memory_size = atoi(optarg);
                 break;
             case 'q':
-                printf("%d\n", atoi(optarg));
+                quantum = atoi(optarg);
                 break;
             case '?':
                 printf("unknown option: %c\n", optopt); 
@@ -80,6 +80,9 @@ int main(int argc, char *argv[])
 
     if (strncmp(scheduling_algo, "ff", 2)==0) {
         ff(&processes, memory_allo, memory_size, quantum);
+    }
+    else if (strncmp(scheduling_algo, "rr", 2)==0) {
+        rr(&processes, memory_allo, memory_size, quantum);
     }
     
 

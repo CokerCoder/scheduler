@@ -23,16 +23,17 @@ void ff(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
 
 
     while (node!=NULL) {
-        process_t curr_process = node->process;
-        if (clock >= curr_process.arrival_time) {
+        
+        process_t* curr_process = &node->process;
+        if (clock >= curr_process->arrival_time) {
             // When unlimited memory
-            printf("%d, RUNNING, id=%d, remaining-time=%d\n", clock, curr_process.pid, curr_process.remaining_time);
-            while (curr_process.remaining_time >= 0) {
+            printf("%d, RUNNING, id=%d, remaining-time=%d\n", clock, curr_process->pid, curr_process->remaining_time);
+            while (curr_process->remaining_time >= 0) {
                 
-                if (curr_process.remaining_time == 0) {
+                if (curr_process->remaining_time == 0) {
                     // Finish current process
                     curr_throughput++;
-                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process.pid, waitingLength(node->next, clock));
+                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, waitingLength(node->next, clock));
                 }
 
                 if (clock % 60 == 0 && clock > 0) {
@@ -46,19 +47,20 @@ void ff(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
                     curr_throughput = 0;
                 }
 
-                if (curr_process.remaining_time == 0) {
+                if (curr_process->remaining_time == 0) {
                     break;
                 }
 
                 clock++;
-                curr_process.remaining_time--;
+                curr_process->remaining_time--;
+                // printList(node);
             }
             
             // Statistics
             total_processes++;
-            double curr_turnaround = clock - curr_process.arrival_time;
+            double curr_turnaround = clock - curr_process->arrival_time;
             total_turnaround += curr_turnaround;
-            double curr_overhead = curr_turnaround / curr_process.job_time;
+            double curr_overhead = curr_turnaround / curr_process->job_time;
             total_overhead += curr_overhead;
             if (curr_overhead > max_overhead) {
                 max_overhead = curr_overhead;
@@ -91,3 +93,55 @@ int waitingLength(node_t* node, int clock) {
     return length;
 }
 
+
+// Round-robin algorithm
+void rr(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
+    
+    node_t* node = *processes;
+    // Start the clock by 0
+    int clock = 0;
+
+    while (node!=NULL) {
+        int elapsed = 0;
+        process_t* curr_process = &node->process;
+        if (clock >= curr_process->arrival_time) {
+            // When unlimited memory
+            printf("%d, RUNNING, id=%d, remaining-time=%d\n", clock, curr_process->pid, curr_process->remaining_time);
+            while (elapsed <= quantum) {
+                if (curr_process->remaining_time == 0) {
+                    // Finish current process
+                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, waitingLength(node->next, clock));
+                    
+                    deleteNode(processes, node);
+                    printList(node);
+                    elapsed = 0;
+                    if (node->next) {
+                        node = node->next;
+                    } else {
+                        node = NULL;
+                    }
+                    break;
+                }
+        
+                if (elapsed == quantum) {
+                    moveToEnd(&node);
+                    // node = *processes;
+                    // curr_process = &node->process;
+                    printList(node);
+                    break;
+                }
+                
+                clock++;
+                elapsed++;
+                curr_process->remaining_time--;
+            }
+
+            if (elapsed == quantum) {
+                continue;
+            }
+        }
+        else {
+            clock++;
+        }
+    }
+}

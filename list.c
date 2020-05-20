@@ -11,6 +11,38 @@ Modified to fit desired data structure
 #include "list.h"
   
 
+/* Given a reference (pointer to pointer) to the head of a list,
+   move the first element to the end of the linked list */
+void moveToEnd(node_t** head_ref) 
+{ 
+    /* If linked list is empty, or it contains  
+       only one node, then nothing needs to be  
+       done, simply return */
+    if (*head_ref == NULL || (*head_ref)->next == NULL) 
+        return; 
+  
+    /* Initialize first and last pointers */
+    node_t* first = *head_ref; 
+    node_t* last = *head_ref; 
+  
+    /*After this loop last contains address  
+    of last node in Linked List */
+    while (last->next != NULL) { 
+        last = last->next; 
+    } 
+  
+    /* Change the head pointer to point  
+       to second node now */
+    *head_ref = first->next; 
+  
+    /* Set the next of first as NULL */
+    first->next = NULL; 
+  
+    /* Set the next of last as first */
+    last->next = first; 
+} 
+
+
 /* Given a reference (pointer to pointer) to the head of a list 
    and an int, inserts a new node on the front of the list. */
 void push(node_t** head_ref, process_t new_process) 
@@ -160,10 +192,9 @@ void deleteNode(node_t** head_ref, node_t* del)
 } 
   
 // This function prints contents of linked list starting from the given node 
-void printList(node_t** processes) 
+void printList(node_t* node) 
 {
     printf("pid      arrival      memory      jobtime      timeleft\n");
-    node_t* node = *processes;
     while (node != NULL) { 
         printf("%-12d%-12d%-12d%-12d%-12d\n", \
         node->process.pid, node->process.arrival_time, node->process.mem_size, node->process.job_time, node->process.remaining_time); 
