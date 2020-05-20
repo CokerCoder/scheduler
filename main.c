@@ -4,11 +4,12 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "list.h"
 #include "algo.h"
+#include "process.h"
+#include "deque.h"
 
 
-void read_inputs(const char* filename, node_t** processes) {
+void read_inputs(const char* filename, Deque* deque) {
 
     int arrival_time = 0;
     int pid = 0;
@@ -22,13 +23,8 @@ void read_inputs(const char* filename, node_t** processes) {
     }
 
     while (fscanf(file, "%d %d %d %d", &arrival_time, &pid, &mem_size, &job_time)==4) {
-        process_t new_process;
-        new_process.arrival_time = arrival_time;
-        new_process.pid = pid;
-        new_process.mem_size = mem_size;
-        new_process.job_time = job_time;
-        new_process.remaining_time = job_time;
-        append(processes, new_process);
+        Process process = new_process(arrival_time, pid, mem_size, job_time, job_time);
+        deque_insert(deque, process);
     }
     fclose(file);
 }
@@ -44,7 +40,11 @@ int main(int argc, char *argv[])
     int quantum = 10;
 
     // Initialize empty doubly linked list
-    struct Node* processes = NULL;
+    Deque* deque = new_deque();
+    if (deque == NULL) {
+        fprintf(stderr, "Error: new_deque() returned NULL\n");
+        exit(EXIT_FAILURE);
+    }
 
     // Read the command line arguments
     int opt;   
@@ -76,15 +76,16 @@ int main(int argc, char *argv[])
         printf("extra arguments: %s\n", argv[optind]);  
     } 
 
-    read_inputs(filename, &processes);
+    read_inputs(filename, deque);
 
     if (strncmp(scheduling_algo, "ff", 2)==0) {
-        ff(&processes, memory_allo, memory_size, quantum);
+        ff(deque, memory_allo, memory_size, quantum);
     }
-    else if (strncmp(scheduling_algo, "rr", 2)==0) {
-        rr(&processes, memory_allo, memory_size, quantum);
-    }
-    
+    // else if (strncmp(scheduling_algo, "rr", 2)==0) {
+    //     rr(&processes, memory_allo, memory_size, quantum);
+    // }
+
+    // print_deque(deque);
 
     return 0; 
 } 

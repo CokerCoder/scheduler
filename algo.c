@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
-#include "list.h"
+#include "deque.h"
+#include "process.h"
 #include "algo.h"
 
 // First come first serve algorithm
-void ff(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
+void ff(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
+    
+    assert(deque!=NULL);
+    Node *curr = deque->head;
 
-    node_t* node = *processes;
     // Start the clock by 0
     int clock = 0;
 
@@ -22,9 +26,9 @@ void ff(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
     double max_overhead = 0;
 
 
-    while (node!=NULL) {
+    while (curr!=NULL) {
         
-        process_t* curr_process = &node->process;
+        Process* curr_process = &curr->process;
         if (clock >= curr_process->arrival_time) {
             // When unlimited memory
             printf("%d, RUNNING, id=%d, remaining-time=%d\n", clock, curr_process->pid, curr_process->remaining_time);
@@ -33,7 +37,7 @@ void ff(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
                 if (curr_process->remaining_time == 0) {
                     // Finish current process
                     curr_throughput++;
-                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, waitingLength(node->next, clock));
+                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, deque->size-1);
                 }
 
                 if (clock % 60 == 0 && clock > 0) {
@@ -66,7 +70,8 @@ void ff(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
                 max_overhead = curr_overhead;
             }
 
-            node = node->next;
+            curr = curr->next;
+            deque_pop(deque);
             
         } else {
             clock++;
@@ -81,21 +86,9 @@ void ff(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
 
 }
 
-// The number of processes waiting to be executed (have already arrived)
-int waitingLength(node_t* node, int clock) {
-    int length = 0;
-    while (node != NULL) {
-        if (clock >= node->process.arrival_time) {
-            length++;
-        }
-        node = node->next;
-    }
-    return length;
-}
-
-
+/*
 // Round-robin algorithm
-void rr(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
+void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
     
     node_t* node = *processes;
     // Start the clock by 0
@@ -110,7 +103,7 @@ void rr(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
             while (elapsed <= quantum) {
                 if (curr_process->remaining_time == 0) {
                     // Finish current process
-                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, waitingLength(node->next, clock));
+                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, 1);
                     
                     deleteNode(processes, node);
                     printList(node);
@@ -145,3 +138,4 @@ void rr(node_t** processes, char* memory_alloc, int mem_size, int quantum) {
         }
     }
 }
+*/
