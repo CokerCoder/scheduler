@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include "list.h"
+#include "algo.h"
 
 
 void read_inputs(const char* filename, node_t** processes) {
@@ -76,7 +77,10 @@ int main(int argc, char *argv[])
     } 
 
     read_inputs(filename, &processes);
-    printList(processes);
+
+    if (strncmp(scheduling_algo, "ff", 2)==0) {
+        ff(&processes, memory_allo, memory_size, quantum);
+    }
     
 
     return 0; 

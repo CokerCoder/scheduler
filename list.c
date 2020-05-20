@@ -160,9 +160,10 @@ void deleteNode(node_t** head_ref, node_t* del)
 } 
   
 // This function prints contents of linked list starting from the given node 
-void printList(node_t* node) 
+void printList(node_t** processes) 
 {
     printf("pid      arrival      memory      jobtime      timeleft\n");
+    node_t* node = *processes;
     while (node != NULL) { 
         printf("%-12d%-12d%-12d%-12d%-12d\n", \
         node->process.pid, node->process.arrival_time, node->process.mem_size, node->process.job_time, node->process.remaining_time); 

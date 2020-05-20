@@ -24,7 +24,7 @@ void insertBefore(node_t** head_ref, node_t* next_node, process_t new_process);
 void insertAfter(node_t* prev_node, process_t new_process);
 void append(node_t** head_ref, process_t new_process);
 void deleteNode(node_t** head_ref, node_t* del);
-void printList(node_t* node);
+void printList(node_t** processes);
 
 
 #endif 
