@@ -77,7 +77,7 @@ Process deque_pop(Deque *deque);
 Process deque_remove(Deque *deque);
 
 
-void move_to_bottom(Deque* deque);
+void move_to_last(Deque* deque, int clock);
 
 
 // Return the number of Points in a Deque

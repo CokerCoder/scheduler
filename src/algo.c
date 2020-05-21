@@ -78,7 +78,9 @@ void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
             while (elapsed <= quantum) {
 
                 if (elapsed == quantum) {
-                    move_to_bottom(deque);
+                    // Move current node to after the last arrival process
+                    // Since we have read the whole list of processes, some of them may not arrived by the time the quantum reached
+                    move_to_last(deque, clock);
                     curr = deque->head;
                     break;
                 }

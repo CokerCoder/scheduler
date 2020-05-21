@@ -165,8 +165,9 @@ Process deque_remove(Deque *deque) {
   return process;
 }
 
-// Move the top node to the bottom
-void move_to_bottom(Deque* deque) {
+// Move the top process to the last available position
+void move_to_last(Deque* deque, int clock) {
+
   assert(deque!=NULL);
   assert(deque->size>0);
 
@@ -178,16 +179,37 @@ void move_to_bottom(Deque* deque) {
   Node* first = deque->head;
   Node* last = deque->tail;
 
+  Node* curr = deque->head;
+
+  // After this loop, curr will be the next arriving process, so we will insert the first process before curr
+  while (curr!=NULL && curr->process.arrival_time <= clock) {
+    curr = curr->next;
+  }
+
+  // If no processes arrives, simply return
+  if (curr==first) {
+    return;
+  }
+
+  // If curr is NULL, means all processes have arrived and simply insert the first process to the end
+  if (curr==NULL) {
+    deque->head = first->next;
+    first->next = NULL;
+    last->next = first;
+    deque->tail = last->next;
+    return;
+  }
+
+  // Otherwise, move the first process before the curr (next arriving) process
   // Change the head pointer to point to second node now
   deque->head = first->next;
 
-  // Set the next of first as NULL
-  first->next = NULL;
-
-  // Set the next of last as first
-  last->next = first;
-  // Change the tail piointe to the original first node
-  deque->tail = last->next;
+  first->prev = curr->prev;
+  curr->prev = first;
+  
+  // Set the next of first as curr
+  first->next = curr;
+  first->prev->next = first;
 }
 
 // Return the number of Points in a Deque
