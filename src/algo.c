@@ -58,6 +58,8 @@ void ff(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
 
 // Round-robin algorithm
 void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
+
+    Stats stats = new_stats();
     
     assert(deque!=NULL);
     Node *curr = deque->head;
@@ -86,16 +88,23 @@ void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
                 curr_process->remaining_time--;
 
                 if (curr_process->remaining_time == 0) {
+                    stats.curr_throughput++;
+                    stats = update_stats(stats, clock, *curr_process);
                     // Finish current process
                     printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, deque->size-1);
                     curr = curr->next;
                     deque_pop(deque);
-                    break;
-                }    
+                    elapsed = quantum+1; // Stop the loop without break
+                }
+                stats = check_throughput(stats, clock);    
             }
         }
         else {
             clock++;
+            stats = check_throughput(stats, clock);
         }
     }
+
+    stats.finish_time = clock;
+    print_stats(stats);
 }
