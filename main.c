@@ -81,9 +81,9 @@ int main(int argc, char *argv[])
     if (strncmp(scheduling_algo, "ff", 2)==0) {
         ff(deque, memory_allo, memory_size, quantum);
     }
-    // else if (strncmp(scheduling_algo, "rr", 2)==0) {
-    //     rr(&processes, memory_allo, memory_size, quantum);
-    // }
+    else if (strncmp(scheduling_algo, "rr", 2)==0) {
+        rr(deque, memory_allo, memory_size, quantum);
+    }
 
     // print_deque(deque);
 

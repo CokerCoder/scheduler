@@ -86,51 +86,44 @@ void ff(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
 
 }
 
-/*
+
+
 // Round-robin algorithm
 void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
     
-    node_t* node = *processes;
+    assert(deque!=NULL);
+    Node *curr = deque->head;
+
     // Start the clock by 0
     int clock = 0;
 
-    while (node!=NULL) {
+    while (curr!=NULL) {
+        
         int elapsed = 0;
-        process_t* curr_process = &node->process;
+        Process* curr_process = &curr->process;
+
         if (clock >= curr_process->arrival_time) {
             // When unlimited memory
             printf("%d, RUNNING, id=%d, remaining-time=%d\n", clock, curr_process->pid, curr_process->remaining_time);
             while (elapsed <= quantum) {
-                if (curr_process->remaining_time == 0) {
-                    // Finish current process
-                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, 1);
-                    
-                    deleteNode(processes, node);
-                    printList(node);
-                    elapsed = 0;
-                    if (node->next) {
-                        node = node->next;
-                    } else {
-                        node = NULL;
-                    }
-                    break;
-                }
-        
+
                 if (elapsed == quantum) {
-                    moveToEnd(&node);
-                    // node = *processes;
-                    // curr_process = &node->process;
-                    printList(node);
+                    move_to_bottom(deque);
+                    curr = deque->head;
                     break;
                 }
-                
+
                 clock++;
                 elapsed++;
                 curr_process->remaining_time--;
-            }
 
-            if (elapsed == quantum) {
-                continue;
+                if (curr_process->remaining_time == 0) {
+                    // Finish current process
+                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, deque->size-1);
+                    curr = curr->next;
+                    deque_pop(deque);
+                    break;
+                }    
             }
         }
         else {
@@ -138,4 +131,3 @@ void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
         }
     }
 }
-*/

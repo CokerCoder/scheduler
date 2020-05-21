@@ -76,6 +76,10 @@ Process deque_pop(Deque *deque);
 // DO NOT CHANGE THIS FUNCTION SIGNATURE
 Process deque_remove(Deque *deque);
 
+
+void move_to_bottom(Deque* deque);
+
+
 // Return the number of Points in a Deque
 //
 // TODO: Fill in the runtime of this function

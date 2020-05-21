@@ -165,6 +165,31 @@ Process deque_remove(Deque *deque) {
   return process;
 }
 
+// Move the top node to the bottom
+void move_to_bottom(Deque* deque) {
+  assert(deque!=NULL);
+  assert(deque->size>0);
+
+  // If there is only one node ledt, nothing can be done
+  if (deque->size==1) {
+    return;
+  }
+
+  Node* first = deque->head;
+  Node* last = deque->tail;
+
+  // Change the head pointer to point to second node now
+  deque->head = first->next;
+
+  // Set the next of first as NULL
+  first->next = NULL;
+
+  // Set the next of last as first
+  last->next = first;
+  // Change the tail piointe to the original first node
+  deque->tail = last->next;
+}
+
 // Return the number of Points in a Deque
 // Runtime: O(1)
 int deque_size(Deque *deque) {
