@@ -3,7 +3,7 @@
 
 #include "deque.h"
 
-void ff(Deque* deque, char* memory_alloc, int mem_size, int quantum);
-void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum);
+void ff(Deque* processes, Deque* ram_list, char* memory_alloc);
+void rr(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum);
 
 #endif 

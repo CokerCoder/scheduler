@@ -40,6 +40,7 @@ struct node {
 //
 // DO NOT CHANGE THIS FUNCTION SIGNATURE
 Deque *new_deque();
+Node *new_node(void* data);
 
 
 void free_deque(Deque *deque);

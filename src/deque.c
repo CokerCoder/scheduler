@@ -13,7 +13,6 @@
 #include "deque.h"
 #include "process.h"
 
-static Node *new_node(void* data);
 
 // Create a new empty Deque and return a pointer to it
 Deque *new_deque() {
@@ -30,7 +29,7 @@ Deque *new_deque() {
 }
 
 // Create a new node with given data
-static Node *new_node(void* data) {
+Node *new_node(void* data) {
   Node *node = (Node*) malloc(sizeof(Node));
   assert(node);
 

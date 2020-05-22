@@ -6,10 +6,11 @@
 
 #include "algo.h"
 #include "process.h"
+#include "ram.h"
 #include "deque.h"
 
 
-void read_inputs(const char* filename, Deque* deque) {
+void read_inputs(const char* filename, Deque* processes) {
 
     int arrival_time = 0;
     int pid = 0;
@@ -24,7 +25,7 @@ void read_inputs(const char* filename, Deque* deque) {
 
     while (fscanf(file, "%d %d %d %d", &arrival_time, &pid, &mem_size, &job_time)==4) {
         Process* process = new_process(arrival_time, pid, mem_size, job_time, job_time);
-        deque_insert(deque, process);
+        deque_insert(processes, process);
     }
     fclose(file);
 }
@@ -39,12 +40,19 @@ int main(int argc, char *argv[])
     int memory_size = 0;
     int quantum = 10;
 
-    // Initialize empty doubly linked list
-    Deque* deque = new_deque();
-    if (deque == NULL) {
-        fprintf(stderr, "Error: new_deque() returned NULL\n");
+
+    Deque* processes = new_deque();
+    if (processes == NULL) {
+        fprintf(stderr, "Error: Failed to initialize new processes deque\n");
         exit(EXIT_FAILURE);
     }
+
+    Deque* ram_list = new_deque();
+    if (ram_list == NULL) {
+        fprintf(stderr, "Error: Failed to initialize new ram deque\n");
+        exit(EXIT_FAILURE);
+    }
+    
 
     // Read the command line arguments
     int opt;   
@@ -76,18 +84,20 @@ int main(int argc, char *argv[])
         printf("extra arguments: %s\n", argv[optind]);  
     } 
 
-    read_inputs(filename, deque);
+    read_inputs(filename, processes);
+    init_ram(ram_list, memory_size);
+
+    print_ram(ram_list);
     
 
     if (strncmp(scheduling_algo, "ff", 2)==0) {
-        ff(deque, memory_allo, memory_size, quantum);
+        ff(processes, ram_list, memory_allo);
     }
     else if (strncmp(scheduling_algo, "rr", 2)==0) {
-        rr(deque, memory_allo, memory_size, quantum);
+        rr(processes, ram_list, memory_allo, quantum);
     }
 
-    // print_deque(deque);
-
-    free_deque(deque);
+    free_deque(processes);
+    free_deque(ram_list);
     return 0; 
 } 

@@ -43,6 +43,6 @@ void print_stats(Stats stats) {
     int avg_throughput = (stats.total_processes+stats.total_throughput-1)/stats.total_throughput; //Round up
     int avg_turnaround = (stats.total_turnaround+stats.total_processes-1)/stats.total_processes; //Round up
     double avg_overhead = stats.total_overhead/stats.total_processes;
-    printf("\nThroughput %d, %d, %d\nTurnaround time %d\nTime overhead %.2f %.2f\nMakespan %d\n", \
+    printf("Throughput %d, %d, %d\nTurnaround time %d\nTime overhead %.2f %.2f\nMakespan %d\n", \
             avg_throughput, stats.min_throughput, stats.max_throughput, avg_turnaround, stats.max_overhead, avg_overhead, stats.finish_time);
 }
