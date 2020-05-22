@@ -23,7 +23,7 @@ void read_inputs(const char* filename, Deque* deque) {
     }
 
     while (fscanf(file, "%d %d %d %d", &arrival_time, &pid, &mem_size, &job_time)==4) {
-        Process process = new_process(arrival_time, pid, mem_size, job_time, job_time);
+        Process* process = new_process(arrival_time, pid, mem_size, job_time, job_time);
         deque_insert(deque, process);
     }
     fclose(file);
@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
     } 
 
     read_inputs(filename, deque);
+    
 
     if (strncmp(scheduling_algo, "ff", 2)==0) {
         ff(deque, memory_allo, memory_size, quantum);
@@ -87,5 +88,6 @@ int main(int argc, char *argv[])
 
     // print_deque(deque);
 
+    free_deque(deque);
     return 0; 
 } 

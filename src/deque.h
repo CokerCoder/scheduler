@@ -15,8 +15,6 @@
 #ifndef DEQUE_H
 #define DEQUE_H
 
-#include "process.h"
-
 // You may change the definition of Deque but DO NOT change the name
 typedef struct deque Deque;
 
@@ -29,7 +27,11 @@ struct deque {
 };
 
 struct node {
-  Process process;
+
+  // Since we need two doubly linked list overall, one for processes and one for memory addresses
+  // So a linked list can store generic data type is needed, which can be achived by storing void* data types
+  void* data;
+
   Node *prev;
   Node *next;
 };
@@ -38,58 +40,23 @@ struct node {
 //
 // DO NOT CHANGE THIS FUNCTION SIGNATURE
 Deque *new_deque();
-Node *new_node();
-// Free the memory associated with a Deque
-//
-// DO NOT CHANGE THIS FUNCTION SIGNATURE
+
+
 void free_deque(Deque *deque);
 void free_node(Node *node);
-// Add a Point to the top of a Deque
-//
-// TODO: Fill in the runtime of this function
-// Runtime: O(1)
-//
-// DO NOT CHANGE THIS FUNCTION SIGNATURE
-void deque_push(Deque *deque, Process process);
-
-// Add a Point to the bottom of a Deque
-//
-// TODO: Fill in the runtime of this function
-// Runtime: O(1)
-//
-// DO NOT CHANGE THIS FUNCTION SIGNATURE
-void deque_insert(Deque *deque, Process process);
-
-// Remove and return the top Point from a Deque
-//
-// TODO: Fill in the runtime of this function
-// Runtime: O(1)
-//
-// DO NOT CHANGE THIS FUNCTION SIGNATURE
-Process deque_pop(Deque *deque);
-
-// Remove and return the bottom Point from a Deque
-//
-// TODO: Fill in the runtime of this function
-// Runtime: O(1)
-//
-// DO NOT CHANGE THIS FUNCTION SIGNATURE
-Process deque_remove(Deque *deque);
 
 
-void move_to_last(Deque* deque, int clock);
+void deque_push(Deque *deque, void* data);
+
+void deque_insert(Deque *deque, void* data);
+
+void* deque_pop(Deque *deque);
+
+void* deque_remove(Deque *deque);
 
 
-// Return the number of Points in a Deque
-//
-// TODO: Fill in the runtime of this function
-// Runtime: O(1)
-//
-// DO NOT CHANGE THIS FUNCTION SIGNATURE
+
 int deque_size(Deque *deque);
 
-// TODO: Add any other functions you might need for your Deque module
-// Helper function to print the whole deque
-void print_deque(Deque *deque);
 
 #endif

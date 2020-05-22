@@ -7,6 +7,7 @@
 #include "algo.h"
 #include "stats.h"
 
+
 // First come first serve algorithm
 void ff(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
 
@@ -19,8 +20,9 @@ void ff(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
     int clock = 0;
 
     while (curr!=NULL) {
-        
-        Process* curr_process = &curr->process;
+
+        Process* curr_process = (Process *) curr->data;
+
         if (clock >= curr_process->arrival_time) {
             // When unlimited memory
             printf("%d, RUNNING, id=%d, remaining-time=%d\n", clock, curr_process->pid, curr_process->remaining_time);
@@ -70,7 +72,7 @@ void rr(Deque* deque, char* memory_alloc, int mem_size, int quantum) {
     while (curr!=NULL) {
         
         int elapsed = 0;
-        Process* curr_process = &curr->process;
+        Process* curr_process = (Process *) curr->data;
 
         if (clock >= curr_process->arrival_time) {
             // When unlimited memory
