@@ -149,5 +149,131 @@ void evict_space(Deque* ram_list, int pid) {
         curr = curr->next;
     }
 
+
+    // If the block is between two occupied blocks, 
+    // or the block is the only block, simply turn this into a free block
+    if (((prev!=NULL && ((Ram *) prev->data)->status=='P') && (next!=NULL && ((Ram *) prev->data)->status=='P'))\
+        || (prev==NULL && next==NULL)) {
+        ((Ram *) target->data)->status = 'H';
+        ((Ram *) target->data)->pid = -1;
+        ((Ram *) target->data)->last_access = -1;
+        return; // Return the process to avoid freeing the target node
+    }
+
+    // If both of the adj blocks are free as well, combine these blocks
+    if ((prev!=NULL && ((Ram *) prev->data)->status=='H') && (next!=NULL && ((Ram *) prev->data)->status=='H')) {
+        ((Ram *) target->data)->status = 'H';
+        ((Ram *) target->data)->pid = -1;
+        ((Ram *) target->data)->last_access = -1;
+        ((Ram *) target->data)->length = ((Ram *) prev->data)->length + ((Ram *) target->data)->length + ((Ram *) next->data)->length;
+        ((Ram *) target->data)->starting = ((Ram *) prev->data)->starting;
+
+        target->prev = prev->prev;
+        if (prev->prev!=NULL) {
+            prev->prev->next = target;
+        } else {
+            ram_list->head = target;
+        }
+
+        target->next = next->next;
+        if (next->next!=NULL) {
+            next->next->prev = target;
+        } else {
+            ram_list->tail = target;
+        }
+
+        free_node(prev);
+        free_node(next);
+        return;
+    }
+
+    // If the block after the target is free, combine the two
+    if (next!=NULL && ((Ram *) next->data)->status=='H') {
+        // Copy the information
+        ((Ram *) next->data)->starting = ((Ram *) target->data)->starting;
+        ((Ram *) next->data)->length = ((Ram *) target->data)->length + ((Ram *) next->data)->length;
+        ((Ram *) next->data)->pid = -1;
+        ((Ram *) next->data)->last_access = -1;
+
+        next->prev = prev;
+        if (prev!=NULL) {
+            prev->next = next;
+        } else {
+            ram_list->head = next;
+        }
+
+        free_node(target);
+        return;
+    }
+
+    // If the block before the target is free, combine the two
+    if (prev!=NULL && ((Ram *) prev->data)->status=='H') {
+        // Copy the information
+        ((Ram *) prev->data)->length = ((Ram *) target->data)->length + ((Ram *) prev->data)->length;
+        ((Ram *) next->data)->pid = -1;
+        ((Ram *) next->data)->last_access = -1;
+
+        prev->next = next;
+        if (next!=NULL) {
+            next->prev = prev;
+        } else {
+            ram_list->tail = prev;
+        }
+
+        free_node(target);
+        return;
+    }
     
+}
+ 
+
+int mem_uasge(Deque* ram_list) {
+    
+    assert(ram_list!=NULL);
+    Node* curr = ram_list->head;
+
+    double total = 0;
+    double used = 0;
+
+    while (curr!=NULL) {
+        Ram* curr_block = (Ram *) curr->data;
+        int curr_size = curr_block->length;
+        total += curr_size;
+        if (curr_block->status == 'P') {
+            used += curr_size;
+        }
+        curr = curr->next;
+    }
+
+    int percentage = used / total * 100;
+
+    return percentage;
+}
+
+
+char* process_addr(Deque* ram_list, int pid) {
+    
+    assert(ram_list!=NULL);
+    Node* curr = ram_list->head;
+
+    char* addr = (char*) malloc(100*sizeof(char));
+    char* head = addr;
+    *(addr) = '[';
+
+    while (curr!=NULL) {
+        Ram* curr_block = (Ram *) curr->data;
+
+        if (curr_block->pid == pid) {
+            for (int i=0;i<curr_block->length/4;i++) {
+                *(++addr) = i + '0';
+                *(++addr) = ',';
+            }
+        }
+        curr = curr->next;
+    }
+
+    *(addr++) = ']';
+    *(addr++) = '\0';
+
+    return head;
 }

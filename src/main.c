@@ -87,9 +87,6 @@ int main(int argc, char *argv[])
     read_inputs(filename, processes);
     init_ram(ram_list, memory_size);
 
-    print_ram(ram_list);
-    
-
     if (strncmp(scheduling_algo, "ff", 2)==0) {
         ff(processes, ram_list, memory_allo);
     }

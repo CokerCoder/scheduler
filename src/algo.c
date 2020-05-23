@@ -75,29 +75,38 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc) {
                         load_process(ram_list, curr_process, available_pos);
                         exist = available_pos;
                         load_time = 2 * curr_process->mem_size / 4;
-                        clock += load_time;
                     }
                 } else {
-                    
+                    // In first-come-first-serve mode, a process must in the disk when comes to its job
+                    // since it will not be swapped out until it has been finished
                 }
-                printf("%d, RUNNING, id=%d, remaining-time=%d, load-time=%d\n", \
-                    clock, curr_process->pid, curr_process->remaining_time, load_time);
-
-                print_ram(ram_list);
-
+                printf("%d, RUNNING, id=%d, remaining-time=%d, load-time=%d, mem-usage=%d%%, mem-addresses=%s\n", \
+                    clock, curr_process->pid, curr_process->remaining_time, load_time, mem_uasge(ram_list), process_addr(ram_list, curr_process->pid));
+                
+                clock += load_time;
+                
                 while (curr_process->remaining_time > 0) {
                     clock++;
                     curr_process->remaining_time--;
 
                     if (curr_process->remaining_time == 0) {
+                        stats.curr_throughput++;
+                        // In ff, only oneeviction is needed and which is the current process
+                        printf("%d, EVICTED, mem-addresses=%s\n", clock, process_addr(ram_list, curr_process->pid));
+                        evict_space(ram_list, curr_process->pid);
                         printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, processes->size-1);
                     }
+                    stats = check_throughput(stats, clock);
                 }
 
+                stats = update_stats(stats, clock, *curr_process);
+
                 curr = curr->next;
+                deque_pop(processes);
             
             } else {
                 clock++;
+                stats = check_throughput(stats, clock);
             }
         }
     }

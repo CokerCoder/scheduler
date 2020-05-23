@@ -32,5 +32,9 @@ void load_process(Deque* ram_list, Process* process, int starting);
 // Evict the block with the given pid process
 void evict_space(Deque* ram_list, int pid);
 
+int mem_uasge(Deque* ram_list);
+
+char* process_addr(Deque* ram_list, int pid);
+
 
 #endif
