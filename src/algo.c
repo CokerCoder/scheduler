@@ -40,7 +40,9 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc) {
                     }
 
                     // Update the stats once increment the clock
-                    stats = check_throughput(stats, clock);
+                    if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                        stats = check_throughput(stats, clock);
+                    }
                 }
 
                 // Update the stats once finish a job
@@ -51,7 +53,9 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc) {
                 
             } else {
                 clock++;
-                stats = check_throughput(stats, clock);
+                if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                    stats = check_throughput(stats, clock);
+                }
             }
         }
     }
@@ -85,7 +89,9 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc) {
                         evict_space(ram_list, curr_process->pid);
                         printf("%d, FINISHED, id=%d, proc-remaining=%d\n", clock, curr_process->pid, proc_remaining(processes, clock));
                     }
-                    stats = check_throughput(stats, clock);
+                    if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                        stats = check_throughput(stats, clock);
+                    }
                 }
 
                 stats = update_stats(stats, clock, *curr_process);
@@ -95,7 +101,9 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc) {
             
             } else {
                 clock++;
-                stats = check_throughput(stats, clock);
+                if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                    stats = check_throughput(stats, clock);
+                }
             }
         }
     }
@@ -151,12 +159,16 @@ void rr(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
                         deque_pop(processes);
                         elapsed = quantum+1; // Stop the loop without break
                     }
-                    stats = check_throughput(stats, clock);    
+                    if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                        stats = check_throughput(stats, clock);
+                    }  
                 }
             }
             else {
                 clock++;
-                stats = check_throughput(stats, clock);
+                if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                    stats = check_throughput(stats, clock);
+                }
             }
         }
     }
@@ -178,17 +190,21 @@ void rr(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
                 if (exist == -1) {
                     // Check if there is enough continous space for loading the process
                     int available_pos = 0;
+                    // char* total_evicted = (char *) malloc(100*sizeof(char));
                     while (1) {
                         available_pos = available_space(ram_list, curr_process->mem_size);
                         if (available_pos < 0) {
                             int least_used_process = least_used(ram_list);
-                            printf("%d, EVICTED, mem-addresses=%s\n", clock, process_addr(ram_list, least_used_process));
+                            // strcat(total_evicted, process_addr(ram_list, least_used_process));
                             
+                            printf("%d, EVICTED, mem-addresses=%s\n", clock, process_addr(ram_list, least_used_process));
                             evict_space(ram_list, least_used_process);
                         } else {
                             break;
                         }
                     }
+                    // printf("here\n");
+                    
                     load_process(ram_list, curr_process, available_pos, clock);
                     // exist = available_pos;
                     load_time = 2 * curr_process->mem_size / 4;
@@ -228,12 +244,17 @@ void rr(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
                         deque_pop(processes);
                         elapsed = quantum+1; // Stop the loop without break
                     }
-                    stats = check_throughput(stats, clock);    
+
+                    if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                        stats = check_throughput(stats, clock);
+                    }  
                 }
             }
             else {
                 clock++;
-                stats = check_throughput(stats, clock);
+                if ((clock % 60 == 0 && clock > 0) || curr==NULL) {
+                    stats = check_throughput(stats, clock);
+                }
             }
         }
     }

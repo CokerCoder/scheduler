@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #include "process.h"
@@ -217,8 +218,8 @@ void evict_space(Deque* ram_list, int pid) {
     if (prev!=NULL && ((Ram *) prev->data)->status=='H') {
         // Copy the information
         ((Ram *) prev->data)->length = ((Ram *) target->data)->length + ((Ram *) prev->data)->length;
-        ((Ram *) next->data)->pid = -1;
-        ((Ram *) next->data)->last_access = -1;
+        ((Ram *) prev->data)->pid = -1;
+        ((Ram *) prev->data)->last_access = -1;
 
         prev->next = next;
         if (next!=NULL) {
@@ -273,7 +274,19 @@ char* process_addr(Deque* ram_list, int pid) {
         if (curr_block->pid == pid) {
             for (int i=0;i<curr_block->length/4;i++) {
 
-                *(++addr) = curr_block->starting/4 + i + '0';
+                int addr_num = curr_block->starting/4 + i;
+                char addr_str[5];
+                sprintf(addr_str, "%d", addr_num);
+                strcat(head, addr_str);
+                if (addr_num == 0) {
+                    addr++;
+                } else {
+                    while (addr_num != 0) {
+                        addr++;
+                        addr_num /= 10;
+                    }
+                }
+                
                 *(++addr) = ',';
             }
         }

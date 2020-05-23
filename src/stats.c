@@ -12,16 +12,16 @@ Stats new_stats() {
 
 
 Stats check_throughput(Stats stats, int clock) {
-    if (clock % 60 == 0 && clock > 0) {
-        if (stats.curr_throughput < stats.min_throughput) {
-            stats.min_throughput = stats.curr_throughput;
-        }
-        else if (stats.curr_throughput > stats.max_throughput) {
-            stats.max_throughput = stats.curr_throughput;
-        }
-        stats.total_throughput++;
-        stats.curr_throughput = 0;
+
+    if (stats.curr_throughput < stats.min_throughput) {
+        stats.min_throughput = stats.curr_throughput;
     }
+    else if (stats.curr_throughput > stats.max_throughput) {
+        stats.max_throughput = stats.curr_throughput;
+    }
+    stats.total_throughput++;
+    stats.curr_throughput = 0;
+    
     return stats;
 }
 
