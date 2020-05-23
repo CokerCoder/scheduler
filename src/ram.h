@@ -27,7 +27,7 @@ int find_process(Deque* ram_list, int pid);
 int available_space(Deque* ram_list, int required);
 
 // Load a process from disk to RAM to the given memory position
-void load_process(Deque* ram_list, Process* process, int starting);
+void load_process(Deque* ram_list, Process* process, int starting, int clock);
 
 // Evict the block with the given pid process
 void evict_space(Deque* ram_list, int pid);
@@ -35,6 +35,10 @@ void evict_space(Deque* ram_list, int pid);
 int mem_uasge(Deque* ram_list);
 
 char* process_addr(Deque* ram_list, int pid);
+
+int least_used(Deque* ram_list);
+
+void update_time(Deque* ram_list, int pid, int clock);
 
 
 #endif

@@ -19,5 +19,7 @@ void move_to_last(Deque* processes, int clock);
 
 void print_processes(Deque *processes);
 
+int proc_remaining(Deque* processes, int clock);
+
 
 #endif 

@@ -32,12 +32,16 @@ void print_ram(Deque* ram_list) {
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
 
+    printf("----------------------------------------------------------------\n");
+
     while (curr!=NULL) {
         Ram* curr_block = (Ram *) curr->data;
         printf("%c    starting: %-5d length: %-5d last access: %-5d pid: %-5d\n", \
         curr_block->status, curr_block->starting, curr_block->length, curr_block->last_access, curr_block->pid);
         curr = curr->next;
     }
+
+    printf("----------------------------------------------------------------\n\n");
 
 }
 
@@ -74,10 +78,10 @@ int available_space(Deque* ram_list, int required) {
 }
 
 
-void load_process(Deque* ram_list, Process* process, int starting) {
+void load_process(Deque* ram_list, Process* process, int starting, int clock) {
     assert(ram_list!=NULL);
 
-    Ram* newblock = new_ram('P', starting, process->mem_size, 0, process->pid);
+    Ram* newblock = new_ram('P', starting, process->mem_size, clock, process->pid);
     Node* new_block = new_node(newblock);
 
     // Find the previous and next block of memory
@@ -152,8 +156,11 @@ void evict_space(Deque* ram_list, int pid) {
 
     // If the block is between two occupied blocks, 
     // or the block is the only block, simply turn this into a free block
-    if (((prev!=NULL && ((Ram *) prev->data)->status=='P') && (next!=NULL && ((Ram *) prev->data)->status=='P'))\
-        || (prev==NULL && next==NULL)) {
+    if (((prev!=NULL && ((Ram *) prev->data)->status=='P') && (next!=NULL && ((Ram *) next->data)->status=='P'))\
+        || (prev==NULL && next==NULL)
+        || (prev==NULL && ((Ram *) next->data)->status=='P')
+        || (next==NULL && ((Ram *) prev->data)->status=='P')
+        ) {
         ((Ram *) target->data)->status = 'H';
         ((Ram *) target->data)->pid = -1;
         ((Ram *) target->data)->last_access = -1;
@@ -161,7 +168,7 @@ void evict_space(Deque* ram_list, int pid) {
     }
 
     // If both of the adj blocks are free as well, combine these blocks
-    if ((prev!=NULL && ((Ram *) prev->data)->status=='H') && (next!=NULL && ((Ram *) prev->data)->status=='H')) {
+    if ((prev!=NULL && ((Ram *) prev->data)->status=='H') && (next!=NULL && ((Ram *) next->data)->status=='H')) {
         ((Ram *) target->data)->status = 'H';
         ((Ram *) target->data)->pid = -1;
         ((Ram *) target->data)->last_access = -1;
@@ -265,7 +272,8 @@ char* process_addr(Deque* ram_list, int pid) {
 
         if (curr_block->pid == pid) {
             for (int i=0;i<curr_block->length/4;i++) {
-                *(++addr) = i + '0';
+
+                *(++addr) = curr_block->starting/4 + i + '0';
                 *(++addr) = ',';
             }
         }
@@ -276,4 +284,40 @@ char* process_addr(Deque* ram_list, int pid) {
     *(addr++) = '\0';
 
     return head;
+}
+
+
+int least_used(Deque* ram_list) {
+
+    assert(ram_list!=NULL);
+    Node* curr = ram_list->head;
+
+    int least_time = 99999;
+    int least_pid = 0;
+
+    while (curr!=NULL) {
+        Ram* curr_block = (Ram *) curr->data;
+        if (curr_block->last_access >= 0 && curr_block->last_access < least_time) {
+            least_time = curr_block->last_access;
+            least_pid = curr_block->pid;
+        }
+        curr = curr->next;
+    }
+
+    return least_pid;
+}
+
+void update_time(Deque* ram_list, int pid, int clock) {
+
+    assert(ram_list!=NULL);
+    Node* curr = ram_list->head;
+
+    while (curr!=NULL) {
+        Ram* curr_block = (Ram *) curr->data;
+        if (curr_block->pid == pid) {
+            curr_block->last_access = clock;
+        }
+        curr = curr->next;
+    }
+    
 }

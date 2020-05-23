@@ -38,16 +38,17 @@ void move_to_last(Deque* processes, int clock) {
 
     Node* curr = processes->head;
 
+    // If no processes arrives, simply return
+    if (((Process *) first->next->data)->arrival_time > clock) {
+        return;
+    }
+
 
     // After this loop, curr will be the next arriving process, so we will insert the first process before curr
     while (curr!=NULL && ((Process *)curr->data)->arrival_time <= clock) {
         curr = curr->next;
     }
-
-    // If no processes arrives, simply return
-    if (curr==first) {
-        return;
-    }
+    
 
     // If curr is NULL, means all processes have arrived and simply insert the first process to the end
     if (curr==NULL) {
@@ -71,6 +72,22 @@ void move_to_last(Deque* processes, int clock) {
 }
 
 
+int proc_remaining(Deque* processes, int clock) {
+    assert(processes!=NULL);
+    Node *curr = processes->head;
+
+    int num = 0;
+    while (curr!=NULL) {
+        Process* curr_process = (Process *) curr->data;
+        if (curr_process->arrival_time < clock) {
+            num++;
+        }
+        curr = curr->next;
+    }
+    return num - 1;
+}
+
+
 // Helper function to print the deque when debugging
 void print_processes(Deque *processes) {
     assert(processes!=NULL);
@@ -79,7 +96,6 @@ void print_processes(Deque *processes) {
     
     printf("pid      arrival      memory      jobtime      timeleft\n");
     while (curr != NULL) {
-        printf("aa");
         Process* curr_process = (Process *) curr->data;
         printf("%-12d%-12d%-12d%-12d%-12d\n", \
         curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time); 
