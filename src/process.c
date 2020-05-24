@@ -7,7 +7,7 @@
 
 
 
-Process* new_process(int arrival_time, int pid, int mem_size, int job_time, int remaining_time) {
+Process* new_process(int arrival_time, int pid, int mem_size, int job_time) {
     
     Process* process = (Process *) malloc(sizeof(Process));
     assert(process);
@@ -17,6 +17,7 @@ Process* new_process(int arrival_time, int pid, int mem_size, int job_time, int 
     process->mem_size = mem_size;
     process->job_time = job_time;
     process->remaining_time = job_time;
+    process->finish_time = -1; // some arbitrary finish time
 
     return process;
 }
@@ -79,12 +80,12 @@ int proc_remaining(Deque* processes, int clock) {
     int num = 0;
     while (curr!=NULL) {
         Process* curr_process = (Process *) curr->data;
-        if (curr_process->arrival_time < clock) {
+        if (curr_process->arrival_time < clock && curr_process->finish_time == -1) {
             num++;
         }
         curr = curr->next;
     }
-    return num - 1;
+    return num;
 }
 
 
@@ -94,11 +95,11 @@ void print_processes(Deque *processes) {
 
     Node *curr = processes->head;
     
-    printf("pid      arrival      memory      jobtime      timeleft\n");
+    printf("\npid      arrival      memory      jobtime      timeleft      finished\n");
     while (curr != NULL) {
         Process* curr_process = (Process *) curr->data;
-        printf("%-12d%-12d%-12d%-12d%-12d\n", \
-        curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time); 
+        printf("%-12d%-12d%-12d%-12d%-12d%-12d\n", \
+        curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time, curr_process->finish_time); 
         curr = curr->next; 
     } 
     printf("\n");
