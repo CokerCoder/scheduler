@@ -7,6 +7,7 @@
 #include "algo.h"
 #include "process.h"
 #include "ram.h"
+#include "page.h"
 #include "deque.h"
 
 
@@ -52,6 +53,12 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error: Failed to initialize new ram deque\n");
         exit(EXIT_FAILURE);
     }
+
+    Deque* pages = new_deque();
+    if (pages == NULL) {
+        fprintf(stderr, "Error: Failed to initialize new page deque\n");
+        exit(EXIT_FAILURE);
+    }
     
 
     // Read the command line arguments
@@ -86,6 +93,7 @@ int main(int argc, char *argv[])
 
     read_inputs(filename, processes);
     init_ram(ram_list, memory_size);
+    init_pages(pages, memory_size);
 
     if (strcmp(scheduling_algo, "ff") == 0) {
         ff(processes, ram_list, memory_allo, quantum);
@@ -94,7 +102,7 @@ int main(int argc, char *argv[])
         rr(processes, ram_list, memory_allo, quantum);
     }
     
-    print_processes(processes);
+    // print_pages(pages);
     free_deque(processes);
     free_deque(ram_list);
     return 0; 

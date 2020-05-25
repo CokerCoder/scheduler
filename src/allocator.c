@@ -20,8 +20,8 @@ void unlimited_allocator(Deque* processes, int* clock, const char* sa, int quant
 
                 if (strncmp(sa, "rr", 2) == 0) {
                     if (elapsed == quantum) {
-                        move_to_last(processes, *clock);
-                        curr = processes->head;
+                        move_to_last(processes, curr_process->pid, *clock);
+                        curr = next_running_process(processes);
                         break;
                     }
                 }
@@ -32,11 +32,11 @@ void unlimited_allocator(Deque* processes, int* clock, const char* sa, int quant
 
                 if (curr_process->remaining_time == 0) {
                     curr_process->finish_time = *clock;
-                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", *clock, curr_process->pid, proc_remaining(processes, *clock));
-                    curr = curr->next;
-                    // deque_pop(processes);
+                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", *clock, curr_process->pid, proc_remaining(processes, *clock));     
+                    break;
                 }
             }
+            curr = curr->next;
         } else {
             (*clock)++;
         }
@@ -81,14 +81,6 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
 
             while (curr_process->remaining_time > 0) {
 
-                if (strcmp(sa, "rr") == 0) {
-                    if (elapsed == quantum) {
-                        move_to_last(processes, *clock);
-                        curr = processes->head;
-                        break;
-                    }
-                }
-
                 (*clock)++;
                 elapsed++;
                 curr_process->remaining_time--;
@@ -99,7 +91,15 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
                     evict_space(ram_list, curr_process->pid);
                     printf("%d, FINISHED, id=%d, proc-remaining=%d\n", *clock, curr_process->pid, proc_remaining(processes, *clock));
                     curr = curr->next;
-                    // deque_pop(processes);
+                    break;
+                }
+
+                if (strcmp(sa, "rr") == 0) {
+                    if (elapsed == quantum) {
+                        move_to_last(processes, curr_process->pid, *clock);
+                        curr = next_running_process(processes);
+                        break;
+                    }
                 }
             }
         } else {

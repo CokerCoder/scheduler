@@ -17,11 +17,13 @@ struct process
 
 Process* new_process(int arrival_time, int pid, int mem_size, int job_time);
 
-void move_to_last(Deque* processes, int clock);
+void move_to_last(Deque* processes, int pid, int clock);
 
 void print_processes(Deque *processes);
 
 int proc_remaining(Deque* processes, int clock);
+
+Node* next_running_process(Deque* processes);
 
 
 #endif 

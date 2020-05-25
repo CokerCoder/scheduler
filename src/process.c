@@ -23,8 +23,8 @@ Process* new_process(int arrival_time, int pid, int mem_size, int job_time) {
 }
 
 
-// Move the top process to the last available position (only if the data is type of process)
-void move_to_last(Deque* processes, int clock) {
+// Move the running process to the last available position (only if the data is type of process)
+void move_to_last(Deque* processes, int pid, int clock) {
 
     assert(processes!=NULL);
     assert(processes->size>0);
@@ -34,35 +34,52 @@ void move_to_last(Deque* processes, int clock) {
         return;
     }
 
-    Node* first = processes->head;
+    Node* first = NULL;
     Node* last = processes->tail;
 
     Node* curr = processes->head;
 
-    // If no processes arrives, simply return
-    if (((Process *) first->next->data)->arrival_time > clock) {
-        return;
+    while (curr!=NULL) {
+        Process* curr_process = ((Process *)curr->data);
+        if (curr_process->pid == pid) {
+            first = curr;
+            break;
+        }
+        curr = curr->next;
     }
 
-
-    // After this loop, curr will be the next arriving process, so we will insert the first process before curr
-    while (curr!=NULL && ((Process *)curr->data)->arrival_time <= clock) {
+    // After this loop, curr will be the next arriving process, so we will insert the running process before curr
+    while (curr!=NULL && (((Process *)curr->data)->arrival_time <= clock)) {
         curr = curr->next;
+    }
+
+    if (curr == first->next) {
+        return;
     }
     
 
-    // If curr is NULL, means all processes have arrived and simply insert the first process to the end
+    // If curr is NULL, means all processes have arrived and simply insert the running process to the end
     if (curr==NULL) {
-        processes->head = first->next;
+        if (processes->head == first) {
+            processes->head = first->next;
+        } else {
+            first->prev->next = first->next;
+            first->next->prev = first->prev;
+        }
         first->next = NULL;
         last->next = first;
+        last->next->prev = last;
         processes->tail = last->next;
         return;
   }
 
-    // Otherwise, move the first process before the curr (next arriving) process
+    // Otherwise, move the running process before the curr (next arriving) process
     // Change the head pointer to point to second node now
-    processes->head = first->next;
+    if (processes->head == first) {
+        processes->head = first->next;
+    } else {
+        first->prev->next = first->next;
+    }
 
     first->prev = curr->prev;
     curr->prev = first;
@@ -103,4 +120,19 @@ void print_processes(Deque *processes) {
         curr = curr->next; 
     } 
     printf("\n");
+}
+
+Node* next_running_process(Deque* processes) {
+    assert(processes!=NULL);
+
+    Node *curr = processes->head;
+    while (curr != NULL) {
+        Process* curr_process = (Process *) curr->data;
+        if (curr_process->remaining_time > 0) {
+            return curr;
+        }
+        curr = curr->next;
+    }
+
+    return curr;
 }
