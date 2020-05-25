@@ -1,7 +1,7 @@
 TARGET = scheduler
 LIBS = -lm
 CC = gcc
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -std=gnu99
 
 .PHONY: default all clean
 
