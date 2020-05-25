@@ -23,7 +23,7 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
 
     }
     
-    if (strcmp(memory_alloc, "p") == 0) {
+    else if (strcmp(memory_alloc, "p") == 0) {
 
         swapping_allocator(processes, ram_list, &clock, "ff", quantum);
 
@@ -33,7 +33,7 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
 
 
 // Round-robin algorithm
-void rr(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
+void rr(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, int quantum) {
 
     assert(processes!=NULL);
 
@@ -48,9 +48,15 @@ void rr(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
     }
 
 
-    if (strcmp(memory_alloc, "p") == 0) {
+    else if (strcmp(memory_alloc, "p") == 0) {
 
         swapping_allocator(processes, ram_list, &clock, "rr", quantum);
+
+    }
+
+    else if (strcmp(memory_alloc, "v") == 0) {
+
+        virtual_allocator(processes, pages, &clock, "rr", quantum);
 
     }
 }

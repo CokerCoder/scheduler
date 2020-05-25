@@ -99,11 +99,13 @@ int main(int argc, char *argv[])
         ff(processes, ram_list, memory_allo, quantum);
     }
     else if (strcmp(scheduling_algo, "rr") == 0) {
-        rr(processes, ram_list, memory_allo, quantum);
+        rr(processes, ram_list, pages, memory_allo, quantum);
     }
     
     // print_pages(pages);
+
     free_deque(processes);
     free_deque(ram_list);
+    free_deque(pages);
     return 0; 
 } 
