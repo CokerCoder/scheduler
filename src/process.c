@@ -79,9 +79,11 @@ void move_to_last(Deque* processes, int pid, int clock) {
     // Change the head pointer to point to second node now
     if (processes->head == first) {
         processes->head = first->next;
+    } else {
+        before->next = first->next;
     }
 
-    before->next = first->next;
+    
     first->next->prev = before;
 
     curr->prev->next = first;
