@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 
 #include "process.h"
 #include "ram.h"
@@ -253,9 +254,9 @@ int mem_uasge(Deque* ram_list) {
         curr = curr->next;
     }
 
-    int percentage = used / total * 100;
+    double percentage = used / total * 100;
 
-    return percentage;
+    return ceil(percentage);
 }
 
 

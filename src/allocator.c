@@ -65,7 +65,7 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
                     if (available_pos < 0) {
                         int least_used_process = least_used(ram_list);
                         printf("%d, EVICTED", *clock);
-                        process_addr(ram_list, curr_process->pid);
+                        process_addr(ram_list, least_used_process);
                         evict_space(ram_list, least_used_process);
                     } else {
                         break;
