@@ -27,5 +27,7 @@ int proc_remaining(Deque* processes, int clock);
 
 Node* next_running_process(Deque* processes);
 
+void print_stats(Deque* processes);
+
 
 #endif 

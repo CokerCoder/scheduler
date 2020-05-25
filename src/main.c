@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
         rr(processes, ram_list, pages, memory_allo, quantum);
     }
     
-    // print_pages(pages);
-    // print_ram(ram_list);
+    // print_processes(processes);
+    print_stats(processes);
 
     free_deque(processes);
     free_deque(ram_list);
