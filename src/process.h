@@ -21,6 +21,8 @@ void move_to_last(Deque* processes, int pid, int clock);
 
 void print_processes(Deque *processes);
 
+void print_processes_reversed(Deque *processes);
+
 int proc_remaining(Deque* processes, int clock);
 
 Node* next_running_process(Deque* processes);

@@ -39,6 +39,7 @@ void move_to_last(Deque* processes, int pid, int clock) {
 
     Node* curr = processes->head;
 
+
     while (curr!=NULL) {
         Process* curr_process = ((Process *)curr->data);
         if (curr_process->pid == pid) {
@@ -48,6 +49,8 @@ void move_to_last(Deque* processes, int pid, int clock) {
         curr = curr->next;
     }
 
+    Node* before = first->prev;
+
     // After this loop, curr will be the next arriving process, so we will insert the running process before curr
     while (curr!=NULL && (((Process *)curr->data)->arrival_time <= clock)) {
         curr = curr->next;
@@ -56,7 +59,6 @@ void move_to_last(Deque* processes, int pid, int clock) {
     if (curr == first->next) {
         return;
     }
-    
 
     // If curr is NULL, means all processes have arrived and simply insert the running process to the end
     if (curr==NULL) {
@@ -71,22 +73,24 @@ void move_to_last(Deque* processes, int pid, int clock) {
         last->next->prev = last;
         processes->tail = last->next;
         return;
-  }
-
+    }
+    // printf("first: %d, curr: %d, first->next: %d, curr->prev: %d\n", ((Process*)first->data)->pid, ((Process*)curr->data)->pid, ((Process*)first->next->data)->pid, ((Process*)curr->prev->data)->pid);
     // Otherwise, move the running process before the curr (next arriving) process
     // Change the head pointer to point to second node now
     if (processes->head == first) {
         processes->head = first->next;
-    } else {
-        first->prev->next = first->next;
     }
 
+    before->next = first->next;
+    first->next->prev = before;
+
+    curr->prev->next = first;
     first->prev = curr->prev;
+
     curr->prev = first;
-    
-    // Set the next of first as curr
+
     first->next = curr;
-    first->prev->next = first;
+ 
 }
 
 
@@ -118,6 +122,21 @@ void print_processes(Deque *processes) {
         printf("%-12d%-12d%-12d%-12d%-12d%-12d\n", \
         curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time, curr_process->finish_time); 
         curr = curr->next; 
+    } 
+    printf("\n");
+}
+
+void print_processes_reversed(Deque *processes) {
+    assert(processes!=NULL);
+
+    Node *curr = processes->tail;
+    
+    printf("\npid      arrival      memory      jobtime      timeleft      finished\n");
+    while (curr != NULL) {
+        Process* curr_process = (Process *) curr->data;
+        printf("%-12d%-12d%-12d%-12d%-12d%-12d\n", \
+        curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time, curr_process->finish_time); 
+        curr = curr->prev; 
     } 
     printf("\n");
 }

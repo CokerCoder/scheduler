@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
     }
     
     // print_pages(pages);
+    // print_ram(ram_list);
 
     free_deque(processes);
     free_deque(ram_list);

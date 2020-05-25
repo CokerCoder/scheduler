@@ -259,44 +259,29 @@ int mem_uasge(Deque* ram_list) {
 }
 
 
-char* process_addr(Deque* ram_list, int pid) {
+void process_addr(Deque* ram_list, int pid) {
     
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
-
-    char* addr = (char*) malloc(100*sizeof(char));
-    char* head = addr;
-    *(addr) = '[';
+    int count = 0;
+    
+    printf(", mem-addresses=[");
 
     while (curr!=NULL) {
-        Ram* curr_block = (Ram *) curr->data;
-
+        Ram* curr_block = ((Ram *)curr->data);
         if (curr_block->pid == pid) {
-            for (int i=0;i<curr_block->length/4;i++) {
-
-                int addr_num = curr_block->starting/4 + i;
-                char addr_str[5];
-                sprintf(addr_str, "%d", addr_num);
-                strcat(head, addr_str);
-                if (addr_num == 0) {
-                    addr++;
-                } else {
-                    while (addr_num != 0) {
-                        addr++;
-                        addr_num /= 10;
-                    }
+            while (count < curr_block->length/4) {
+                if (count!=0) {
+                    printf(",");
                 }
-                
-                *(++addr) = ',';
+                printf("%d", curr_block->starting/4+count);
+                count++;
             }
         }
         curr = curr->next;
     }
-
-    *(addr++) = ']';
-    *(addr++) = '\0';
-
-    return head;
+    printf("]\n");
+    
 }
 
 

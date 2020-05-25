@@ -34,7 +34,7 @@ void evict_space(Deque* ram_list, int pid);
 
 int mem_uasge(Deque* ram_list);
 
-char* process_addr(Deque* ram_list, int pid);
+void process_addr(Deque* ram_list, int pid);
 
 int least_used(Deque* ram_list);
 

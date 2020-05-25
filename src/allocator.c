@@ -50,6 +50,7 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
     Node* curr = processes->head;
     
     while (curr!=NULL) {
+        // print_ram(ram_list);
         int elapsed = 0;
         Process* curr_process = (Process *) curr->data;
 
@@ -63,7 +64,8 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
                     available_pos = available_space(ram_list, curr_process->mem_size);
                     if (available_pos < 0) {
                         int least_used_process = least_used(ram_list);
-                        printf("%d, EVICTED, mem-addresses=%s\n", *clock, process_addr(ram_list, least_used_process));
+                        printf("%d, EVICTED", *clock);
+                        process_addr(ram_list, curr_process->pid);
                         evict_space(ram_list, least_used_process);
                     } else {
                         break;
@@ -76,8 +78,11 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
                 update_time(ram_list, curr_process->pid, *clock);
             }
 
-            printf("%d, RUNNING, id=%d, remaining-time=%d, load-time=%d, mem-usage=%d%%, mem-addresses=%s\n", \
-                    *clock, curr_process->pid, curr_process->remaining_time, load_time, mem_uasge(ram_list), process_addr(ram_list, curr_process->pid));
+            printf("%d, RUNNING, id=%d, remaining-time=%d, load-time=%d, mem-usage=%d%%", \
+                    *clock, curr_process->pid, curr_process->remaining_time, load_time, mem_uasge(ram_list));
+            process_addr(ram_list, curr_process->pid);
+            
+            // print_ram(ram_list);
 
             *clock += load_time;
 
@@ -89,9 +94,11 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
 
                 if (curr_process->remaining_time == 0) {
                     curr_process->finish_time = *clock;
-                    printf("%d, EVICTED, mem-addresses=%s\n", *clock, process_addr(ram_list, curr_process->pid));
+                    printf("%d, EVICTED", *clock);
+                    process_addr(ram_list, curr_process->pid);
                     evict_space(ram_list, curr_process->pid);
                     printf("%d, FINISHED, id=%d, proc-remaining=%d\n", *clock, curr_process->pid, proc_remaining(processes, *clock));
+                    // print_ram(ram_list);
                     curr = curr->next;
                     break;
                 }
@@ -108,6 +115,7 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
             (*clock)++;
         }
     }
+    // print_ram(ram_list);
 }
 
 
