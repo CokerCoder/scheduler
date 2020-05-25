@@ -33,11 +33,12 @@ void unlimited_allocator(Deque* processes, int* clock, const char* sa, int quant
 
                 if (curr_process->remaining_time == 0) {
                     curr_process->finish_time = *clock;
-                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", *clock, curr_process->pid, proc_remaining(processes, *clock));     
+                    printf("%d, FINISHED, id=%d, proc-remaining=%d\n", *clock, curr_process->pid, proc_remaining(processes, *clock));
+                    curr = curr->next;     
                     break;
                 }
             }
-            curr = curr->next;
+            
         } else {
             (*clock)++;
         }
