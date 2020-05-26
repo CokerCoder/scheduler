@@ -121,7 +121,7 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
 
 void virtual_allocator(Deque* processes, Deque* pages, int* clock, const char* sa, int quantum) {
     Node* curr = processes->head;
-    print_pages(pages);
+    // print_pages(pages);
 
     while (curr!=NULL) {
         int elapsed = 0;
@@ -135,7 +135,7 @@ void virtual_allocator(Deque* processes, Deque* pages, int* clock, const char* s
             int i = 0;
 
             int more = 0;
-            if (required < 4) {
+            if (required < 4 && (curr_process->mem_size/4 < 4)) {
                 more = required;
             } else {
                 more = 4;
