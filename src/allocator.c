@@ -121,6 +121,7 @@ void swapping_allocator(Deque* processes, Deque* ram_list, int* clock, const cha
 
 void virtual_allocator(Deque* processes, Deque* pages, int* clock, const char* sa, int quantum) {
     Node* curr = processes->head;
+    print_pages(pages);
 
     while (curr!=NULL) {
         int elapsed = 0;
@@ -133,7 +134,14 @@ void virtual_allocator(Deque* processes, Deque* pages, int* clock, const char* s
             int evicted_pages[pages->size];
             int i = 0;
 
-            while (already_loaded(pages, curr_process->pid)+free_pages(pages) < 4) {
+            int more = 0;
+            if (required < 4) {
+                more = required;
+            } else {
+                more = 4;
+            }
+
+            while (already_loaded(pages, curr_process->pid)+free_pages(pages) < more) {
 
                 int least_used_process = least_used_id(pages, curr_process->pid);
                 int evicted = evict_page(pages, least_used_process);
