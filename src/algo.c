@@ -6,6 +6,7 @@
 #include "deque.h"
 #include "algo.h"
 #include "allocator.h"
+#include "process.h"
 
 
 // First come first serve algorithm
@@ -70,7 +71,7 @@ void cs(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, int
 
     // print_processes(processes);
     // Sort the processes queue based on their job time and pass it to first-come-first-serve algorithm
-    bubble_sort(processes);
+    sjf(processes);
     // printf("\nsort\n");
     // print_processes(processes);
 

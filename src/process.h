@@ -30,7 +30,7 @@ Node* next_running_process(Deque* processes);
 void print_stats(Deque* processes);
 
 void swap(void** a, void** b);
-void bubble_sort(Deque* processes);
+void sjf(Deque* processes);
 
 
 #endif 

@@ -232,7 +232,7 @@ void swap(void** a, void** b) {
 }
 
 
-void bubble_sort(Deque* processes) {
+void sjf(Deque* processes) {
     assert(processes);
 
     Node* head = processes->head;
@@ -251,9 +251,11 @@ void bubble_sort(Deque* processes) {
         ptr = head;
 
         while (ptr->next != lptr) {
-            if (((Process *)ptr->data)->job_time > ((Process *)ptr->next->data)->job_time) {
-                swap(&(ptr->data), &(ptr->next->data));
-                swapped = 1;
+            if (((Process *)ptr->data)->arrival_time == ((Process *)ptr->next->data)->arrival_time) {
+                if (((Process *)ptr->data)->job_time > ((Process *)ptr->next->data)->job_time) {
+                    swap(&(ptr->data), &(ptr->next->data));
+                    swapped = 1;
+                }
             }
             ptr = ptr->next;
         }

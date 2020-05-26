@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
     
     // print_processes(processes);
     print_stats(processes);
+    // print_pages(pages);
 
     free_deque(processes);
     free_deque(ram_list);
