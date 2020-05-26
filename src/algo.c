@@ -24,7 +24,7 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc, int quantum) {
 
     }
     
-    else if (strcmp(memory_alloc, "p") == 0) {
+    else if (strcmp(memory_alloc, "p") == 0 || strcmp(memory_alloc, "v") == 0) {
 
         swapping_allocator(processes, ram_list, &clock, "ff", quantum);
 
