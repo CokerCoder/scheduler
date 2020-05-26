@@ -6,6 +6,7 @@
 #include "deque.h"
 #include "algo.h"
 #include "allocator.h"
+#include "process.h"
 
 
 // First come first serve algorithm
@@ -59,4 +60,20 @@ void rr(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, int
         virtual_allocator(processes, pages, &clock, "rr", quantum);
 
     }
+}
+
+
+
+// Custom: Shortest job first
+void cs(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, int quantum) {
+
+    assert(processes!=NULL);
+
+    // print_processes(processes);
+    // Sort the processes queue based on their job time and pass it to first-come-first-serve algorithm
+    bubble_sort(processes);
+    // printf("\nsort\n");
+    // print_processes(processes);
+
+    ff(processes, ram_list, memory_alloc, quantum);
 }

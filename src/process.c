@@ -223,3 +223,42 @@ void print_stats(Deque* processes) {
     printf("Makespan %d\n", ((Process*)processes->tail->data)->finish_time);
         
 }
+
+
+void swap(void** a, void** b) {
+    void* tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+
+void bubble_sort(Deque* processes) {
+    assert(processes);
+
+    Node* head = processes->head;
+    Node* ptr = NULL;
+    Node* lptr = NULL;
+
+    int swapped = 0;
+
+    if (head == NULL) {
+        return;
+    }
+
+    do
+    {
+        swapped = 0;
+        ptr = head;
+
+        while (ptr->next != lptr) {
+            if (((Process *)ptr->data)->job_time > ((Process *)ptr->next->data)->job_time) {
+                swap(&(ptr->data), &(ptr->next->data));
+                swapped = 1;
+            }
+            ptr = ptr->next;
+        }
+        lptr = ptr;
+
+    } while (swapped);
+
+}

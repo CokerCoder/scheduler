@@ -101,6 +101,9 @@ int main(int argc, char *argv[])
     else if (strcmp(scheduling_algo, "rr") == 0) {
         rr(processes, ram_list, pages, memory_allo, quantum);
     }
+    else if (strcmp(scheduling_algo, "cs") == 0) {
+        cs(processes, ram_list, pages, memory_allo, quantum);
+    }
     
     // print_processes(processes);
     print_stats(processes);
