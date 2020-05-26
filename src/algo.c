@@ -6,7 +6,6 @@
 #include "deque.h"
 #include "algo.h"
 #include "allocator.h"
-#include "process.h"
 
 
 // First come first serve algorithm
