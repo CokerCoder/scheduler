@@ -177,10 +177,6 @@ void print_stats(Deque* processes) {
     while (curr != NULL) {
         Process* curr_process = (Process *) curr->data;
 
-        if (curr_process->finish_time <= interval) {
-            curr_throughput++;
-        }
-
         while (curr_process->finish_time > interval) {
             if (curr_throughput < min_throughput) {
                 min_throughput = curr_throughput;
@@ -189,10 +185,25 @@ void print_stats(Deque* processes) {
                 max_throughput = curr_throughput;
             }
             total_throughput++;
-            curr_throughput = 1;
+            curr_throughput = 0;
             interval += 60;
         }
+        
+        if (curr_process->finish_time <= interval) {
+            curr_throughput++;
+        }
 
+        if (curr->next == NULL) {
+            if (curr_throughput < min_throughput) {
+                min_throughput = curr_throughput;
+            }
+            if (curr_throughput > max_throughput) {
+                max_throughput = curr_throughput;
+            }
+            total_throughput++;
+        }
+
+        
         int curr_turnaround = curr_process->finish_time - curr_process->arrival_time;
         total_turnaround += curr_turnaround;
         
@@ -206,7 +217,7 @@ void print_stats(Deque* processes) {
         curr = curr->next;
     }
 
-    printf("Throughput %d, %d, %d\n", total_processes/total_throughput, min_throughput, max_throughput);
+    printf("Throughput %d, %d, %d\n", (total_processes + total_throughput - 1)/ (total_throughput), min_throughput, max_throughput);
     printf("Turnaround time %d\n", (total_turnaround + total_processes - 1) / (total_processes));
     printf("Time overhead %.2f %.2f\n", max_overhead, total_overhead/total_processes);
     printf("Makespan %d\n", ((Process*)processes->tail->data)->finish_time);
