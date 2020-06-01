@@ -1,21 +1,17 @@
 /* * * * * * *
- * Deque module (i.e., double ended queue) for Assignment 1
+ * Deque module
  *
  * created for COMP20007 Design of Algorithms 2019
  * template by Tobias Edwards <tobias.edwards@unimelb.edu.au>
- * implementation by <Insert Name Here>
+ * implementation by Yunfei Jing 987784
+ * Modified for COMP30023 Computer Systems
  */
 
-// You must not change any of the code already provided in this file, such as
-// type definitions, constants or functions.
-//
-// You may, however, add additional functions and/or types which you may need
-// while implementing your algorithms and data structures.
 
 #ifndef DEQUE_H
 #define DEQUE_H
 
-// You may change the definition of Deque but DO NOT change the name
+
 typedef struct deque Deque;
 
 typedef struct node Node;
@@ -28,7 +24,7 @@ struct deque {
 
 struct node {
 
-  // Since we need two doubly linked list overall, one for processes and one for memory addresses
+  // Since we need three doubly linked list overall, one for processes and one for memory addresses and one for pages
   // So a linked list can store generic data type is needed, which can be achived by storing void* data types
   void* data;
 
@@ -36,9 +32,7 @@ struct node {
   Node *next;
 };
 
-// Create a new empty Deque and return a pointer to it
-//
-// DO NOT CHANGE THIS FUNCTION SIGNATURE
+// Initalize new deque and node and return a pointer to it
 Deque *new_deque();
 Node *new_node(void* data);
 
@@ -47,16 +41,15 @@ void free_deque(Deque *deque);
 void free_node(Node *node);
 
 
+// Add a node to the front
 void deque_push(Deque *deque, void* data);
-
+// Add a node to the back
 void deque_insert(Deque *deque, void* data);
-
+// Delete the first node
 void* deque_pop(Deque *deque);
-
+// Delete the last node
 void* deque_remove(Deque *deque);
-
-
-
+// Size
 long deque_size(Deque *deque);
 
 

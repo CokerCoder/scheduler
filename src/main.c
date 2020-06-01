@@ -11,6 +11,7 @@
 #include "deque.h"
 
 
+// Read the input from file
 void read_inputs(const char* filename, Deque* processes) {
 
     long arrival_time = 0;
@@ -42,18 +43,21 @@ int main(int argc, char *argv[])
     long quantum = 10;
 
 
+    // Linked list to store processes
     Deque* processes = new_deque();
     if (processes == NULL) {
         fprintf(stderr, "Error: Failed to initialize new processes deque\n");
         exit(EXIT_FAILURE);
     }
 
+    // Linked list to store ram blocks (used in swapping)
     Deque* ram_list = new_deque();
     if (ram_list == NULL) {
         fprintf(stderr, "Error: Failed to initialize new ram deque\n");
         exit(EXIT_FAILURE);
     }
 
+    // Linked list to store pages
     Deque* pages = new_deque();
     if (pages == NULL) {
         fprintf(stderr, "Error: Failed to initialize new page deque\n");

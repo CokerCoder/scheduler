@@ -32,8 +32,10 @@ void load_process(Deque* ram_list, Process* process, long starting, long clock);
 // Evict the block with the given pid process
 void evict_space(Deque* ram_list, long pid);
 
+// Memory usage percentage
 long mem_uasge(Deque* ram_list);
 
+// Print the process address
 void process_addr(Deque* ram_list, long pid);
 
 long least_used(Deque* ram_list);

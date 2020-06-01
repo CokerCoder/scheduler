@@ -1,9 +1,10 @@
 /* * * * * * *
- * Deque module (i.e., double ended queue) for Assignment 1
+ * Deque module
  *
  * created for COMP20007 Design of Algorithms 2019
  * template by Tobias Edwards <tobias.edwards@unimelb.edu.au>
  * implementation by Yunfei Jing 987784
+ * modified for COMP30023 Computer Systems for a generic data type
  */
 
 #include <stdio.h>
