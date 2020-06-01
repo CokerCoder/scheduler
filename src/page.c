@@ -96,48 +96,6 @@ int load_process_topage(Deque* pages, int pid, int required, int clock) {
 }
 
 
-int least_used_id(Deque* pages, int running_id) {
-
-    assert(pages!=NULL);
-    Node* curr = pages->head;
-
-    int least_time = 99999;
-    int least_pid = 0;
-
-    while (curr!=NULL) {
-        Page* curr_page = ((Page *)curr->data);
-        if (curr_page->last_access >= 0 && curr_page->last_access < least_time && curr_page->pid != running_id) {
-            least_time = curr_page->last_access;
-            least_pid = curr_page->pid;
-        }
-        curr = curr->next;
-    }
-
-    return least_pid;
-}
-
-
-int recent_used_id(Deque* pages, int running_id) {
-
-    assert(pages!=NULL);
-    Node* curr = pages->head;
-
-    int recent_time = 0;
-    int recent_pid = 0;
-
-    while (curr!=NULL) {
-        Page* curr_page = ((Page *)curr->data);
-        if (curr_page->last_access >= 0 && curr_page->last_access > recent_time && curr_page->pid != running_id) {
-            recent_time = curr_page->last_access;
-            recent_pid = curr_page->pid;
-        }
-        curr = curr->next;
-    }
-
-    return recent_pid;
-}
-
-
 // Evict pages one at a time and return the page number that evicted
 int evict_page(Deque* pages, int pid) {
 

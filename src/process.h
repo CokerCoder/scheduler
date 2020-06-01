@@ -13,6 +13,7 @@ struct process
     int job_time;
     int remaining_time;
     int finish_time;
+    int last_access;
 };
 
 Process* new_process(int arrival_time, int pid, int mem_size, int job_time);
@@ -31,6 +32,11 @@ void print_stats(Deque* processes);
 
 void swap(void** a, void** b);
 void sjf(Deque* processes);
+
+int least_used_id(Deque* processes, int running_id);
+int recent_used_id(Deque* processes, int running_id);
+
+void update_access(Deque* processes, int evicted_id);
 
 
 #endif 

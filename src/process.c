@@ -18,6 +18,7 @@ Process* new_process(int arrival_time, int pid, int mem_size, int job_time) {
     process->job_time = job_time;
     process->remaining_time = job_time;
     process->finish_time = -1; // some arbitrary finish time
+    process->last_access = -1;
 
     return process;
 }
@@ -118,11 +119,11 @@ void print_processes(Deque *processes) {
 
     Node *curr = processes->head;
     
-    printf("\npid      arrival      memory      jobtime      timeleft      finished\n");
+    printf("\npid      arrival      memory      jobtime      timeleft      finished      lastaccess\n");
     while (curr != NULL) {
         Process* curr_process = (Process *) curr->data;
-        printf("%-12d%-12d%-12d%-12d%-12d%-12d\n", \
-        curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time, curr_process->finish_time); 
+        printf("%-12d%-12d%-12d%-12d%-12d%-12d%-12d\n", \
+        curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time, curr_process->finish_time, curr_process->last_access); 
         curr = curr->next; 
     } 
     printf("\n");
@@ -263,4 +264,58 @@ void sjf(Deque* processes) {
 
     } while (swapped);
 
+}
+
+int least_used_id(Deque* processes, int running_id) {
+
+    assert(processes!=NULL);
+    Node* curr = processes->head;
+
+    int least_time = 999999999;
+    int least_pid = 0;
+
+    while (curr!=NULL) {
+        Process* curr_process = ((Process *)curr->data);
+        if (curr_process->last_access >= 0 && curr_process->last_access < least_time && curr_process->pid != running_id) {
+            least_time = curr_process->last_access;
+            least_pid = curr_process->pid;
+        }
+        curr = curr->next;
+    }
+
+    return least_pid;
+}
+
+int recent_used_id(Deque* processes, int running_id) {
+
+    assert(processes!=NULL);
+    Node* curr = processes->head;
+
+    int most_time = 0;
+    int most_pid = 0;
+
+    while (curr!=NULL) {
+        Process* curr_process = ((Process *)curr->data);
+        if (curr_process->last_access >= 0 && curr_process->last_access > most_time && curr_process->pid != running_id) {
+            most_time = curr_process->last_access;
+            most_pid = curr_process->pid;
+        }
+        curr = curr->next;
+    }
+
+    return most_pid;
+}
+
+
+void update_access(Deque* processes, int evicted_id) {
+    assert(processes!=NULL);
+    Node* curr = processes->head;
+
+    while (curr!=NULL) {
+        Process* curr_process = ((Process *)curr->data);
+        if (curr_process->pid == evicted_id) {
+            curr_process->last_access = -1;
+        }
+        curr = curr->next;
+    }
 }
