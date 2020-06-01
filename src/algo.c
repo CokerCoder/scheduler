@@ -60,6 +60,12 @@ void rr(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, int
         virtual_allocator(processes, pages, &clock, "rr", quantum);
 
     }
+
+    else if (strcmp(memory_alloc, "cm") == 0) {
+
+        custom_allocator(processes, pages, &clock, "rr", quantum);
+
+    }
 }
 
 

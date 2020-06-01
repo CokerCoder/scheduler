@@ -18,6 +18,7 @@ int free_pages(Deque* pages);
 int already_loaded(Deque* pages, int pid);
 int load_process_topage(Deque* pages, int pid, int required, int clock);
 int least_used_id(Deque* pages, int running_id);
+int recent_used_id(Deque* pages, int running_id);
 int evict_page(Deque* pages, int pid);
 int has_process(Deque* pages, int pid);
 void print_process_addr(Deque* pages, int pid);
