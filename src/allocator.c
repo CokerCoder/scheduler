@@ -15,6 +15,7 @@ void unlimited_allocator(Deque* processes, __int64_t* clock, const char* sa, __i
     while (curr!=NULL) {
         __int64_t elapsed = 0;
         Process* curr_process = (Process *) curr->data;
+        
         if (*clock >= curr_process->arrival_time) {
             printf("%ld, RUNNING, id=%ld, remaining-time=%ld\n", *clock, curr_process->pid, curr_process->remaining_time);
             while (curr_process->remaining_time > 0) {
@@ -48,7 +49,7 @@ void unlimited_allocator(Deque* processes, __int64_t* clock, const char* sa, __i
 
 void swapping_allocator(Deque* processes, Deque* ram_list, __int64_t* clock, const char* sa, __int64_t quantum) {
     Node* curr = processes->head;
-    
+    __int64_t ram_size = ((Ram*)ram_list->head->data)->length;
     while (curr!=NULL) {
         // print_ram(ram_list);
         __int64_t elapsed = 0;
@@ -61,7 +62,7 @@ void swapping_allocator(Deque* processes, Deque* ram_list, __int64_t* clock, con
             if (exist_in_ram == -1) {
                 __int64_t available_pos = 0;
 
-                __int64_t evicted_pages[1000];
+                __int64_t evicted_pages[ram_size];
                 __int64_t i = 0;
 
                 while (1) {

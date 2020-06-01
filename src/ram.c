@@ -292,7 +292,7 @@ __int64_t least_used(Deque* ram_list) {
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
 
-    __int64_t least_time = 99999;
+    __int64_t least_time = __INT64_MAX__;
     __int64_t least_pid = 0;
 
     while (curr!=NULL) {

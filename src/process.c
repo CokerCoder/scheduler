@@ -167,7 +167,7 @@ void print_stats(Deque* processes) {
     __int64_t interval = 60;
     __int64_t curr_throughput = 0;
     __int64_t total_throughput = 0;
-    __int64_t min_throughput = 99999;
+    __int64_t min_throughput = __INT64_MAX__;
     __int64_t max_throughput = 0;
     __int64_t total_turnaround = 0;
     double total_overhead = 0;
@@ -306,7 +306,7 @@ __int64_t least_used_id(Deque* processes, __int64_t running_id) {
     assert(processes!=NULL);
     Node* curr = processes->head;
 
-    __int64_t least_time = 999999999;
+    __int64_t least_time = __INT64_MAX__;
     __int64_t least_pid = 0;
 
     while (curr!=NULL) {
