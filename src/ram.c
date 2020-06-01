@@ -125,6 +125,7 @@ void load_process(Deque* ram_list, Process* process, int starting, int clock) {
 
         new_block->next = left_block;
         left_block->prev = new_block;
+        left_block->next = next;
 
         if (next!=NULL) {
             next->prev = left_block;
