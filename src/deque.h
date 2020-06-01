@@ -19,7 +19,7 @@ typedef struct node Node;
 struct deque {
   Node *head;
   Node *tail;
-  long size;
+  __int64_t size;
 };
 
 struct node {
@@ -50,7 +50,7 @@ void* deque_pop(Deque *deque);
 // Delete the last node
 void* deque_remove(Deque *deque);
 // Size
-long deque_size(Deque *deque);
+__int64_t deque_size(Deque *deque);
 
 
 #endif

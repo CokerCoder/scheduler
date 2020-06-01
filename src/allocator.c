@@ -8,12 +8,12 @@
 #include "page.h"
 
 
-void unlimited_allocator(Deque* processes, long* clock, const char* sa, long quantum) {
+void unlimited_allocator(Deque* processes, __int64_t* clock, const char* sa, __int64_t quantum) {
     
     Node* curr = processes->head;
     
     while (curr!=NULL) {
-        long elapsed = 0;
+        __int64_t elapsed = 0;
         Process* curr_process = (Process *) curr->data;
         if (*clock >= curr_process->arrival_time) {
             printf("%ld, RUNNING, id=%ld, remaining-time=%ld\n", *clock, curr_process->pid, curr_process->remaining_time);
@@ -46,32 +46,32 @@ void unlimited_allocator(Deque* processes, long* clock, const char* sa, long qua
 }
 
 
-void swapping_allocator(Deque* processes, Deque* ram_list, long* clock, const char* sa, long quantum) {
+void swapping_allocator(Deque* processes, Deque* ram_list, __int64_t* clock, const char* sa, __int64_t quantum) {
     Node* curr = processes->head;
     
     while (curr!=NULL) {
         // print_ram(ram_list);
-        long elapsed = 0;
+        __int64_t elapsed = 0;
         Process* curr_process = (Process *) curr->data;
 
         if (*clock >= curr_process->arrival_time) {
-            long exist_in_ram = find_process(ram_list, curr_process->pid);
-            long load_time = 0;
+            __int64_t exist_in_ram = find_process(ram_list, curr_process->pid);
+            __int64_t load_time = 0;
 
             if (exist_in_ram == -1) {
-                long available_pos = 0;
+                __int64_t available_pos = 0;
 
-                long evicted_pages[1000];
-                long i = 0;
+                __int64_t evicted_pages[1000];
+                __int64_t i = 0;
 
                 while (1) {
                     available_pos = available_space(ram_list, curr_process->mem_size);
                     if (available_pos < 0) {
-                        long least_used_process = least_used_id(processes, curr_process->pid);
+                        __int64_t least_used_process = least_used_id(processes, curr_process->pid);
                         // printf("least id: %ld\n", least_used_process);
                         
                         Node* curr = ram_list->head;
-                        long count = 0;
+                        __int64_t count = 0;
 
                         while (curr!=NULL) {
                             Ram* curr_block = ((Ram *)curr->data);
@@ -145,22 +145,22 @@ void swapping_allocator(Deque* processes, Deque* ram_list, long* clock, const ch
 }
 
 
-void virtual_allocator(Deque* processes, Deque* pages, long* clock, const char* sa, long quantum) {
+void virtual_allocator(Deque* processes, Deque* pages, __int64_t* clock, const char* sa, __int64_t quantum) {
     Node* curr = processes->head;
     // print_pages(pages);
 
     while (curr!=NULL) {
-        long elapsed = 0;
+        __int64_t elapsed = 0;
         Process* curr_process = (Process *) curr->data;
 
         if (*clock >= curr_process->arrival_time) {
-            long required = curr_process->mem_size/4 - already_loaded(pages, curr_process->pid); // how many more pages needed
-            long load_time = 0;
+            __int64_t required = curr_process->mem_size/4 - already_loaded(pages, curr_process->pid); // how many more pages needed
+            __int64_t load_time = 0;
 
-            long evicted_pages[pages->size];
-            long i = 0;
+            __int64_t evicted_pages[pages->size];
+            __int64_t i = 0;
 
-            long more = 0;
+            __int64_t more = 0;
             if (required < 4 && (curr_process->mem_size/4 < 4)) {
                 more = curr_process->mem_size/4;
             } else {
@@ -169,11 +169,11 @@ void virtual_allocator(Deque* processes, Deque* pages, long* clock, const char* 
 
             while (already_loaded(pages, curr_process->pid)+free_pages(pages)<more) {
 
-                long least_used_process = least_used_id(processes, curr_process->pid);
+                __int64_t least_used_process = least_used_id(processes, curr_process->pid);
                 // print_pages(pages);
                 // print_processes(processes);
                 // printf("evict %ld\n", least_used_process);
-                long evicted = evict_page(pages, least_used_process);
+                __int64_t evicted = evict_page(pages, least_used_process);
                 evicted_pages[i++] = evicted;
                 // Check if there are still this process in the memory
                 if (has_process(pages, least_used_process) == -1) {
@@ -182,11 +182,11 @@ void virtual_allocator(Deque* processes, Deque* pages, long* clock, const char* 
                 
             }
             if (i > 0) {
-                qsort(evicted_pages, i, sizeof(long), cmpfunc);
+                qsort(evicted_pages, i, sizeof(__int64_t), cmpfunc);
                 print_evicted(evicted_pages, *clock, i);
             }
 
-            long loaded = load_process_topage(pages, curr_process->pid, required, *clock);
+            __int64_t loaded = load_process_topage(pages, curr_process->pid, required, *clock);
             load_time = 2 * loaded;
             // page fault penalty
             curr_process->remaining_time += curr_process->mem_size/4 - already_loaded(pages, curr_process->pid);
@@ -233,22 +233,22 @@ void virtual_allocator(Deque* processes, Deque* pages, long* clock, const char* 
 } 
 
 
-void custom_allocator(Deque* processes, Deque* pages, long* clock, const char* sa, long quantum) {
+void custom_allocator(Deque* processes, Deque* pages, __int64_t* clock, const char* sa, __int64_t quantum) {
     Node* curr = processes->head;
     // print_pages(pages);
 
     while (curr!=NULL) {
-        long elapsed = 0;
+        __int64_t elapsed = 0;
         Process* curr_process = (Process *) curr->data;
 
         if (*clock >= curr_process->arrival_time) {
-            long required = curr_process->mem_size/4 - already_loaded(pages, curr_process->pid);
-            long load_time = 0;
+            __int64_t required = curr_process->mem_size/4 - already_loaded(pages, curr_process->pid);
+            __int64_t load_time = 0;
 
-            long evicted_pages[pages->size];
-            long i = 0;
+            __int64_t evicted_pages[pages->size];
+            __int64_t i = 0;
 
-            long more = 0;
+            __int64_t more = 0;
             if (required < 4 && (curr_process->mem_size/4 < 4)) {
                 more = curr_process->mem_size/4;
             } else {
@@ -257,19 +257,19 @@ void custom_allocator(Deque* processes, Deque* pages, long* clock, const char* s
 
             while (already_loaded(pages, curr_process->pid)+free_pages(pages)<more) {
 
-                long recent_used_process = recent_used_id(processes, curr_process->pid);
-                long evicted = evict_page(pages, recent_used_process);
+                __int64_t recent_used_process = recent_used_id(processes, curr_process->pid);
+                __int64_t evicted = evict_page(pages, recent_used_process);
                 evicted_pages[i++] = evicted;
                 if (has_process(pages, recent_used_process) == -1) {
                     update_access(processes, recent_used_process);
                 }
             }
             if (i > 0) {
-                qsort(evicted_pages, i, sizeof(long), cmpfunc);
+                qsort(evicted_pages, i, sizeof(__int64_t), cmpfunc);
                 print_evicted(evicted_pages, *clock, i);
             }
 
-            long loaded = load_process_topage(pages, curr_process->pid, required, *clock);
+            __int64_t loaded = load_process_topage(pages, curr_process->pid, required, *clock);
             load_time = 2 * loaded;
             // page fault penalty
             curr_process->remaining_time += curr_process->mem_size/4 - already_loaded(pages, curr_process->pid);

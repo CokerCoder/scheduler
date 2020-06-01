@@ -8,39 +8,39 @@ typedef struct ram Ram;
 struct ram
 {
     char status; // 'H' for empty and 'P' for occupied
-    long starting;
-    long length;
-    long last_access;
-    long pid;
+    __int64_t starting;
+    __int64_t length;
+    __int64_t last_access;
+    __int64_t pid;
 };
 
 
-void init_ram(Deque* ram, long mem_size);
-Ram* new_ram(char status, long starting, long length, long last_access, long pid);
+void init_ram(Deque* ram, __int64_t mem_size);
+Ram* new_ram(char status, __int64_t starting, __int64_t length, __int64_t last_access, __int64_t pid);
 void print_ram(Deque* ram_list);
 
 // Check if a given process already in the RAM
-long find_process(Deque* ram_list, long pid);
+__int64_t find_process(Deque* ram_list, __int64_t pid);
 
 // Check if there is enough space in the RAM
 // Return: Starting position of the available block, -1 for unavailable
-long available_space(Deque* ram_list, long required);
+__int64_t available_space(Deque* ram_list, __int64_t required);
 
 // Load a process from disk to RAM to the given memory position
-void load_process(Deque* ram_list, Process* process, long starting, long clock);
+void load_process(Deque* ram_list, Process* process, __int64_t starting, __int64_t clock);
 
 // Evict the block with the given pid process
-void evict_space(Deque* ram_list, long pid);
+void evict_space(Deque* ram_list, __int64_t pid);
 
 // Memory usage percentage
-long mem_uasge(Deque* ram_list);
+__int64_t mem_uasge(Deque* ram_list);
 
 // Print the process address
-void process_addr(Deque* ram_list, long pid);
+void process_addr(Deque* ram_list, __int64_t pid);
 
-long least_used(Deque* ram_list);
+__int64_t least_used(Deque* ram_list);
 
-void update_time(Deque* ram_list, long pid, long clock);
+void update_time(Deque* ram_list, __int64_t pid, __int64_t clock);
 
 
 #endif

@@ -9,13 +9,13 @@
 #include "deque.h"
 
 
-void init_ram(Deque* ram_list, long mem_size) {
+void init_ram(Deque* ram_list, __int64_t mem_size) {
     Ram* ram_block = new_ram('H', 0, mem_size, -1, -1);
     deque_insert(ram_list, ram_block);
 }
 
 
-Ram* new_ram(char status, long starting, long length, long last_access, long pid) {
+Ram* new_ram(char status, __int64_t starting, __int64_t length, __int64_t last_access, __int64_t pid) {
     Ram* ram_block = (Ram *) malloc(sizeof(Ram));
     assert(ram_block);
 
@@ -48,7 +48,7 @@ void print_ram(Deque* ram_list) {
 }
 
 
-long find_process(Deque* ram_list, long pid) {
+__int64_t find_process(Deque* ram_list, __int64_t pid) {
     
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
@@ -64,7 +64,7 @@ long find_process(Deque* ram_list, long pid) {
 }
 
 
-long available_space(Deque* ram_list, long required) {
+__int64_t available_space(Deque* ram_list, __int64_t required) {
     
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
@@ -80,7 +80,7 @@ long available_space(Deque* ram_list, long required) {
 }
 
 
-void load_process(Deque* ram_list, Process* process, long starting, long clock) {
+void load_process(Deque* ram_list, Process* process, __int64_t starting, __int64_t clock) {
     assert(ram_list!=NULL);
 
     Ram* newblock = new_ram('P', starting, process->mem_size, clock, process->pid);
@@ -117,7 +117,7 @@ void load_process(Deque* ram_list, Process* process, long starting, long clock) 
     }
 
     // Calculate how much free space left on that block
-    long left = ((Ram *) target->data)->length - process->mem_size;
+    __int64_t left = ((Ram *) target->data)->length - process->mem_size;
     // If there is space left over, make a new block
     if (left > 0) {
         Ram* leftblock = new_ram('H', starting+process->mem_size, left, -1, -1);
@@ -138,7 +138,7 @@ void load_process(Deque* ram_list, Process* process, long starting, long clock) 
 }
 
 
-void evict_space(Deque* ram_list, long pid) {
+void evict_space(Deque* ram_list, __int64_t pid) {
     assert(ram_list!=NULL);
 
     Node* curr = ram_list->head;
@@ -237,7 +237,7 @@ void evict_space(Deque* ram_list, long pid) {
 }
  
 
-long mem_uasge(Deque* ram_list) {
+__int64_t mem_uasge(Deque* ram_list) {
     
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
@@ -247,7 +247,7 @@ long mem_uasge(Deque* ram_list) {
 
     while (curr!=NULL) {
         Ram* curr_block = (Ram *) curr->data;
-        long curr_size = curr_block->length;
+        __int64_t curr_size = curr_block->length;
         total += curr_size;
         if (curr_block->status == 'P') {
             used += curr_size;
@@ -261,11 +261,11 @@ long mem_uasge(Deque* ram_list) {
 }
 
 
-void process_addr(Deque* ram_list, long pid) {
+void process_addr(Deque* ram_list, __int64_t pid) {
     
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
-    long count = 0;
+    __int64_t count = 0;
     
     printf(", mem-addresses=[");
 
@@ -287,13 +287,13 @@ void process_addr(Deque* ram_list, long pid) {
 }
 
 
-long least_used(Deque* ram_list) {
+__int64_t least_used(Deque* ram_list) {
 
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;
 
-    long least_time = 99999;
-    long least_pid = 0;
+    __int64_t least_time = 99999;
+    __int64_t least_pid = 0;
 
     while (curr!=NULL) {
         Ram* curr_block = (Ram *) curr->data;
@@ -307,7 +307,7 @@ long least_used(Deque* ram_list) {
     return least_pid;
 }
 
-void update_time(Deque* ram_list, long pid, long clock) {
+void update_time(Deque* ram_list, __int64_t pid, __int64_t clock) {
 
     assert(ram_list!=NULL);
     Node* curr = ram_list->head;

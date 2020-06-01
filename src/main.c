@@ -14,10 +14,10 @@
 // Read the input from file
 void read_inputs(const char* filename, Deque* processes) {
 
-    long arrival_time = 0;
-    long pid = 0;
-    long mem_size = 0;
-    long job_time = 0;
+    __int64_t arrival_time = 0;
+    __int64_t pid = 0;
+    __int64_t mem_size = 0;
+    __int64_t job_time = 0;
 
     FILE* file = fopen(filename, "r");
     if (file==NULL) {
@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
     char filename[50] = "";
     char scheduling_algo[5] = "";
     char memory_allo[5] = "";
-    long memory_size = 0;
-    long quantum = 10;
+    __int64_t memory_size = 0;
+    __int64_t quantum = 10;
 
 
     // Linked list to store processes
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     
 
     // Read the command line arguments
-    long opt;   
+    __int64_t opt;   
     while((opt = getopt(argc, argv, ":f:a:m:s:q:")) != -1)  
     {  
         switch(opt)  

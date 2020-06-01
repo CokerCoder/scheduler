@@ -10,12 +10,12 @@
 
 
 // First come first serve algorithm
-void ff(Deque* processes, Deque* ram_list, char* memory_alloc, long quantum) {
+void ff(Deque* processes, Deque* ram_list, char* memory_alloc, __int64_t quantum) {
 
     assert(processes!=NULL);
     
     // Start the clock by 0
-    long clock = 0;
+    __int64_t clock = 0;
 
 
     if (strcmp(memory_alloc, "u") == 0) {
@@ -34,12 +34,12 @@ void ff(Deque* processes, Deque* ram_list, char* memory_alloc, long quantum) {
 
 
 // Round-robin algorithm
-void rr(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, long quantum) {
+void rr(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, __int64_t quantum) {
 
     assert(processes!=NULL);
 
     // Start the clock by 0
-    long clock = 0;
+    __int64_t clock = 0;
 
 
     if (strcmp(memory_alloc, "u") == 0) {
@@ -71,7 +71,7 @@ void rr(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, lon
 
 
 // Custom: Shortest job first
-void cs(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, long quantum) {
+void cs(Deque* processes, Deque* ram_list, Deque* pages, char* memory_alloc, __int64_t quantum) {
 
     assert(processes!=NULL);
 
