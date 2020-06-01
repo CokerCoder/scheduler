@@ -23,7 +23,7 @@ typedef struct node Node;
 struct deque {
   Node *head;
   Node *tail;
-  int size;
+  long size;
 };
 
 struct node {
@@ -57,7 +57,7 @@ void* deque_remove(Deque *deque);
 
 
 
-int deque_size(Deque *deque);
+long deque_size(Deque *deque);
 
 
 #endif

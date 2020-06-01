@@ -6,22 +6,22 @@
 typedef struct page Page;
 struct page
 {
-    int n;
-    int pid;
-    int last_access;
+    long n;
+    long pid;
+    long last_access;
 };
 
 
-void init_pages(Deque* pages, int mem_size);
+void init_pages(Deque* pages, long mem_size);
 void print_pages(Deque* pages);
-int free_pages(Deque* pages);
-int already_loaded(Deque* pages, int pid);
-int load_process_topage(Deque* pages, int pid, int required, int clock);
-int evict_page(Deque* pages, int pid);
-int has_process(Deque* pages, int pid);
-void print_process_addr(Deque* pages, int pid);
-int mem_usage_page(Deque* pages);
-void print_evicted(int evicted_pages[], int clock, int n);
+long free_pages(Deque* pages);
+long already_loaded(Deque* pages, long pid);
+long load_process_topage(Deque* pages, long pid, long required, long clock);
+long evict_page(Deque* pages, long pid);
+long has_process(Deque* pages, long pid);
+void print_process_addr(Deque* pages, long pid);
+long mem_usage_page(Deque* pages);
+void print_evicted(long evicted_pages[], long clock, long n);
 int cmpfunc (const void * a, const void * b);
 
 

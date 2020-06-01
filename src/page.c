@@ -7,9 +7,9 @@
 #define PAGE_SIZE 4
 
 
-void init_pages(Deque* pages, int mem_size) {
+void init_pages(Deque* pages, long mem_size) {
     assert(pages!=NULL);
-    int i = 0;
+    long i = 0;
     for (;i<mem_size/PAGE_SIZE;i++) {
         Page* new_page = (Page *) malloc(sizeof(Page));
         assert(new_page);
@@ -29,7 +29,7 @@ void print_pages(Deque* pages) {
 
     while (curr!=NULL) {
         Page* curr_page = (Page *) curr->data;
-        printf("%-5d last access: %-5d pid: %-5d\n", \
+        printf("%-5ld last access: %-5ld pid: %-5ld\n", \
         curr_page->n, curr_page->last_access, curr_page->pid);
         curr = curr->next;
     }
@@ -38,12 +38,12 @@ void print_pages(Deque* pages) {
 
 }
 
-int free_pages(Deque* pages) {
+long free_pages(Deque* pages) {
 
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    int free = 0;
+    long free = 0;
     while(curr!=NULL) {
         Page* curr_page = ((Page *)curr->data);
         if (curr_page->pid == -1) {
@@ -55,12 +55,12 @@ int free_pages(Deque* pages) {
     return free;
 }
 
-int already_loaded(Deque* pages, int pid) {
+long already_loaded(Deque* pages, long pid) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    int loaded = 0;
+    long loaded = 0;
     while(curr!=NULL) {
         Page* curr_page = ((Page *)curr->data);
         if (curr_page->pid == pid) {
@@ -73,12 +73,12 @@ int already_loaded(Deque* pages, int pid) {
 }
 
 
-int load_process_topage(Deque* pages, int pid, int required, int clock) {
+long load_process_topage(Deque* pages, long pid, long required, long clock) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    int loaded = 0;
+    long loaded = 0;
     while(curr!=NULL) {
         if (loaded == required) {
             break;
@@ -97,7 +97,7 @@ int load_process_topage(Deque* pages, int pid, int required, int clock) {
 
 
 // Evict pages one at a time and return the page number that evicted
-int evict_page(Deque* pages, int pid) {
+long evict_page(Deque* pages, long pid) {
 
     assert(pages!=NULL);
     Node* curr = pages->head;
@@ -115,7 +115,7 @@ int evict_page(Deque* pages, int pid) {
 }
 
 
-int has_process(Deque* pages, int pid) {
+long has_process(Deque* pages, long pid) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
@@ -131,12 +131,12 @@ int has_process(Deque* pages, int pid) {
 }
 
 
-void print_process_addr(Deque* pages, int pid) {
+void print_process_addr(Deque* pages, long pid) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    int count = 0;
+    long count = 0;
     
     printf(", mem-addresses=[");
 
@@ -146,7 +146,7 @@ void print_process_addr(Deque* pages, int pid) {
             if (count!=0) {
                 printf(",");
             }
-            printf("%d", curr_page->n);
+            printf("%ld", curr_page->n);
             count++;
         }
         curr = curr->next;
@@ -155,7 +155,7 @@ void print_process_addr(Deque* pages, int pid) {
 }
 
 
-int mem_usage_page(Deque* pages) {
+long mem_usage_page(Deque* pages) {
     assert(pages!=NULL);
     Node* curr = pages->head;
 
@@ -171,24 +171,24 @@ int mem_usage_page(Deque* pages) {
         curr = curr->next;
     }
 
-    int percentage = used / total * 100;
+    long percentage = used / total * 100;
 
     return percentage;
 }
 
 
-void print_evicted(int evicted_pages[], int clock, int n) {
-    printf("%d, EVICTED, mem-addresses=[", clock);
-    for (int j=0;j<n;j++) {
+void print_evicted(long evicted_pages[], long clock, long n) {
+    printf("%ld, EVICTED, mem-addresses=[", clock);
+    for (long j=0;j<n;j++) {
         if (j!=0) {
             printf(",");
         }
-        printf("%d", evicted_pages[j]);
+        printf("%ld", evicted_pages[j]);
     }
     printf("]\n");
 }
 
 int cmpfunc (const void * a, const void * b) {
-   return ( *(int*)a - *(int*)b );
+   return ( *(long*)a - *(long*)b );
 }
 

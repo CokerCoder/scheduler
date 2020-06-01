@@ -147,7 +147,7 @@ void* deque_remove(Deque *deque) {
 
 // Return the number of Points in a Deque
 // Runtime: O(1)
-int deque_size(Deque *deque) {
+long deque_size(Deque *deque) {
   assert(deque!=NULL);
   return deque->size;
 }

@@ -13,10 +13,10 @@
 
 void read_inputs(const char* filename, Deque* processes) {
 
-    int arrival_time = 0;
-    int pid = 0;
-    int mem_size = 0;
-    int job_time = 0;
+    long arrival_time = 0;
+    long pid = 0;
+    long mem_size = 0;
+    long job_time = 0;
 
     FILE* file = fopen(filename, "r");
     if (file==NULL) {
@@ -24,7 +24,7 @@ void read_inputs(const char* filename, Deque* processes) {
         exit(EXIT_FAILURE);
     }
 
-    while (fscanf(file, "%d %d %d %d", &arrival_time, &pid, &mem_size, &job_time)==4) {
+    while (fscanf(file, "%ld %ld %ld %ld", &arrival_time, &pid, &mem_size, &job_time)==4) {
         Process* process = new_process(arrival_time, pid, mem_size, job_time);
         deque_insert(processes, process);
     }
@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
     char filename[50] = "";
     char scheduling_algo[5] = "";
     char memory_allo[5] = "";
-    int memory_size = 0;
-    int quantum = 10;
+    long memory_size = 0;
+    long quantum = 10;
 
 
     Deque* processes = new_deque();
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     
 
     // Read the command line arguments
-    int opt;   
+    long opt;   
     while((opt = getopt(argc, argv, ":f:a:m:s:q:")) != -1)  
     {  
         switch(opt)  
