@@ -1,0 +1,13 @@
+The customised scheduling algorithm I chose is Shortest Job First algorithm. 
+The process with the least job time is processed first if any of them are arrived in the same time.
+
+This algorithm performs extremely well with a lower overhead time compared to both first come first serve algorithm and round robin algorithm, 
+especially when there are a lot of processes arrives in the same time and the job time of them vary a lot, as well as if two processes arrives together,
+and one of them has a very large job time, the shorter process don't have to wait for the longer one so it saves a lot turnaround time.
+
+The customised memory management I chose is to evict the Most-Recently-Executed process' pages first.
+This algorithm performs better than the virtual memory allocator but not as good as the swapping allocator.
+
+It creates a shorter overhead time than the virtual memory allocator because the most recently used process is actually the last process the program will call in the next round.
+Therefore it can save some page fault penalty.
+
