@@ -95,6 +95,8 @@ int main(int argc, char *argv[])
     init_ram(ram_list, memory_size);
     init_pages(pages, memory_size);
 
+    sort_pid(processes);
+
     if (strcmp(scheduling_algo, "ff") == 0) {
         ff(processes, ram_list, memory_allo, quantum);
     }

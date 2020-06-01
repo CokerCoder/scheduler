@@ -266,6 +266,41 @@ void sjf(Deque* processes) {
 
 }
 
+// Sort the process based on the pid when arrives the same time
+void sort_pid(Deque* processes) {
+    assert(processes);
+
+    Node* head = processes->head;
+    Node* ptr = NULL;
+    Node* lptr = NULL;
+
+    int swapped = 0;
+
+    if (head == NULL) {
+        return;
+    }
+
+    do
+    {
+        swapped = 0;
+        ptr = head;
+
+        while (ptr->next != lptr) {
+            if (((Process *)ptr->data)->arrival_time == ((Process *)ptr->next->data)->arrival_time) {
+                if (((Process *)ptr->data)->pid > ((Process *)ptr->next->data)->pid) {
+                    swap(&(ptr->data), &(ptr->next->data));
+                    swapped = 1;
+                }
+            }
+            ptr = ptr->next;
+        }
+        lptr = ptr;
+
+    } while (swapped);
+
+}
+
+
 int least_used_id(Deque* processes, int running_id) {
 
     assert(processes!=NULL);

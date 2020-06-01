@@ -32,6 +32,7 @@ void print_stats(Deque* processes);
 
 void swap(void** a, void** b);
 void sjf(Deque* processes);
+void sort_pid(Deque* processes);
 
 int least_used_id(Deque* processes, int running_id);
 int recent_used_id(Deque* processes, int running_id);
