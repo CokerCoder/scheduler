@@ -6,30 +6,30 @@
 typedef struct page Page;
 struct page
 {
-    __int64_t n;
-    __int64_t pid;
-    __int64_t last_access;
+    long long int n;
+    long long int pid;
+    long long int last_access;
 };
 
 // Initialize the pages linked list
-void init_pages(Deque* pages, __int64_t mem_size);
+void init_pages(Deque* pages, long long int mem_size);
 void print_pages(Deque* pages);
-__int64_t free_pages(Deque* pages);
+long long int free_pages(Deque* pages);
 
 // Number of pages of process pid that already loaded into the pages
-__int64_t already_loaded(Deque* pages, __int64_t pid);
+long long int already_loaded(Deque* pages, long long int pid);
 // Load the process with pid to the page
-__int64_t load_process_topage(Deque* pages, __int64_t pid, __int64_t required, __int64_t clock);
+long long int load_process_topage(Deque* pages, long long int pid, long long int required, long long int clock);
 // evict a single page of process with pid and return the evicted page position
-__int64_t evict_page(Deque* pages, __int64_t pid);
+long long int evict_page(Deque* pages, long long int pid);
 // check if process with pid in the ram, if so return the position, otherwise return -1
-__int64_t has_process(Deque* pages, __int64_t pid);
+long long int has_process(Deque* pages, long long int pid);
 // print process address
-void print_process_addr(Deque* pages, __int64_t pid);
+void print_process_addr(Deque* pages, long long int pid);
 // Memory used percentage
-__int64_t mem_usage_page(Deque* pages);
+long long int mem_usage_page(Deque* pages);
 // Helper function to print out the evicted pages
-void print_evicted(__int64_t evicted_pages[], __int64_t clock, __int64_t n);
+void print_evicted(long long int evicted_pages[], long long int clock, long long int n);
 // Compare function used in the qsort
 int cmpfunc (const void * a, const void * b);
 

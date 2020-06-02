@@ -4,10 +4,10 @@
 #include "deque.h"
 
 
-void unlimited_allocator(Deque* processes, __int64_t* clock, const char* sa, __int64_t quantum);
-void swapping_allocator(Deque* processes, Deque* ram_list, __int64_t* clock, const char* sa, __int64_t quantum);
-void virtual_allocator(Deque* processes, Deque* pages, __int64_t* clock, const char* sa, __int64_t quantum);
-void custom_allocator(Deque* processes, Deque* pages, __int64_t* clock, const char* sa, __int64_t quantum);
+void unlimited_allocator(Deque* processes, long long int* clock, const char* sa, long long int quantum);
+void swapping_allocator(Deque* processes, Deque* ram_list, long long int* clock, const char* sa, long long int quantum);
+void virtual_allocator(Deque* processes, Deque* pages, long long int* clock, const char* sa, long long int quantum);
+void custom_allocator(Deque* processes, Deque* pages, long long int* clock, const char* sa, long long int quantum);
 
 
 

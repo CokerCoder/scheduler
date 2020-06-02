@@ -7,9 +7,9 @@
 #define PAGE_SIZE 4
 
 
-void init_pages(Deque* pages, __int64_t mem_size) {
+void init_pages(Deque* pages, long long int mem_size) {
     assert(pages!=NULL);
-    __int64_t i = 0;
+    long long int i = 0;
     for (;i<mem_size/PAGE_SIZE;i++) {
         Page* new_page = (Page *) malloc(sizeof(Page));
         assert(new_page);
@@ -29,7 +29,7 @@ void print_pages(Deque* pages) {
 
     while (curr!=NULL) {
         Page* curr_page = (Page *) curr->data;
-        printf("%-5ld last access: %-5ld pid: %-5ld\n", \
+        printf("%-5lld last access: %-5lld pid: %-5lld\n", \
         curr_page->n, curr_page->last_access, curr_page->pid);
         curr = curr->next;
     }
@@ -38,12 +38,12 @@ void print_pages(Deque* pages) {
 
 }
 
-__int64_t free_pages(Deque* pages) {
+long long int free_pages(Deque* pages) {
 
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    __int64_t free = 0;
+    long long int free = 0;
     while(curr!=NULL) {
         Page* curr_page = ((Page *)curr->data);
         if (curr_page->pid == -1) {
@@ -55,12 +55,12 @@ __int64_t free_pages(Deque* pages) {
     return free;
 }
 
-__int64_t already_loaded(Deque* pages, __int64_t pid) {
+long long int already_loaded(Deque* pages, long long int pid) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    __int64_t loaded = 0;
+    long long int loaded = 0;
     while(curr!=NULL) {
         Page* curr_page = ((Page *)curr->data);
         if (curr_page->pid == pid) {
@@ -73,12 +73,12 @@ __int64_t already_loaded(Deque* pages, __int64_t pid) {
 }
 
 
-__int64_t load_process_topage(Deque* pages, __int64_t pid, __int64_t required, __int64_t clock) {
+long long int load_process_topage(Deque* pages, long long int pid, long long int required, long long int clock) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    __int64_t loaded = 0;
+    long long int loaded = 0;
     while(curr!=NULL) {
         if (loaded == required) {
             break;
@@ -97,7 +97,7 @@ __int64_t load_process_topage(Deque* pages, __int64_t pid, __int64_t required, _
 
 
 // Evict pages one at a time and return the page number that evicted
-__int64_t evict_page(Deque* pages, __int64_t pid) {
+long long int evict_page(Deque* pages, long long int pid) {
 
     assert(pages!=NULL);
     Node* curr = pages->head;
@@ -115,7 +115,7 @@ __int64_t evict_page(Deque* pages, __int64_t pid) {
 }
 
 
-__int64_t has_process(Deque* pages, __int64_t pid) {
+long long int has_process(Deque* pages, long long int pid) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
@@ -131,12 +131,12 @@ __int64_t has_process(Deque* pages, __int64_t pid) {
 }
 
 
-void print_process_addr(Deque* pages, __int64_t pid) {
+void print_process_addr(Deque* pages, long long int pid) {
     
     assert(pages!=NULL);
     Node* curr = pages->head;
 
-    __int64_t count = 0;
+    long long int count = 0;
     
     printf(", mem-addresses=[");
 
@@ -146,7 +146,7 @@ void print_process_addr(Deque* pages, __int64_t pid) {
             if (count!=0) {
                 printf(",");
             }
-            printf("%ld", curr_page->n);
+            printf("%lld", curr_page->n);
             count++;
         }
         curr = curr->next;
@@ -155,7 +155,7 @@ void print_process_addr(Deque* pages, __int64_t pid) {
 }
 
 
-__int64_t mem_usage_page(Deque* pages) {
+long long int mem_usage_page(Deque* pages) {
     assert(pages!=NULL);
     Node* curr = pages->head;
 
@@ -171,24 +171,24 @@ __int64_t mem_usage_page(Deque* pages) {
         curr = curr->next;
     }
 
-    __int64_t percentage = used / total * 100;
+    long long int percentage = used / total * 100;
 
     return percentage;
 }
 
 
-void print_evicted(__int64_t evicted_pages[], __int64_t clock, __int64_t n) {
-    printf("%ld, EVICTED, mem-addresses=[", clock);
-    for (__int64_t j=0;j<n;j++) {
+void print_evicted(long long int evicted_pages[], long long int clock, long long int n) {
+    printf("%lld, EVICTED, mem-addresses=[", clock);
+    for (long long int j=0;j<n;j++) {
         if (j!=0) {
             printf(",");
         }
-        printf("%ld", evicted_pages[j]);
+        printf("%lld", evicted_pages[j]);
     }
     printf("]\n");
 }
 
 int cmpfunc (const void * a, const void * b) {
-   return ( *(__int64_t*)a - *(__int64_t*)b );
+   return ( *(long long int*)a - *(long long int*)b );
 }
 

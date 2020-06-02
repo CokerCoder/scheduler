@@ -7,7 +7,7 @@
 
 
 
-Process* new_process(__int64_t arrival_time, __int64_t pid, __int64_t mem_size, __int64_t job_time) {
+Process* new_process(long long int arrival_time, long long int pid, long long int mem_size, long long int job_time) {
     
     Process* process = (Process *) malloc(sizeof(Process));
     assert(process);
@@ -25,7 +25,7 @@ Process* new_process(__int64_t arrival_time, __int64_t pid, __int64_t mem_size, 
 
 
 // Move the running process to the last available position (only if the data is type of process)
-void move_to_last(Deque* processes, __int64_t pid, __int64_t clock) {
+void move_to_last(Deque* processes, long long int pid, long long int clock) {
 
     assert(processes!=NULL);
     assert(processes->size>0);
@@ -75,7 +75,7 @@ void move_to_last(Deque* processes, __int64_t pid, __int64_t clock) {
         processes->tail = last->next;
         return;
     }
-    // printf("first: %ld, curr: %ld, first->next: %ld, curr->prev: %ld\n", ((Process*)first->data)->pid, ((Process*)curr->data)->pid, ((Process*)first->next->data)->pid, ((Process*)curr->prev->data)->pid);
+    // printf("first: %lld, curr: %lld, first->next: %lld, curr->prev: %lld\n", ((Process*)first->data)->pid, ((Process*)curr->data)->pid, ((Process*)first->next->data)->pid, ((Process*)curr->prev->data)->pid);
     // Otherwise, move the running process before the curr (next arriving) process
     // Change the head pointer to point to second node now
     if (processes->head == first) {
@@ -97,11 +97,11 @@ void move_to_last(Deque* processes, __int64_t pid, __int64_t clock) {
 }
 
 
-__int64_t proc_remaining(Deque* processes, __int64_t clock) {
+long long int proc_remaining(Deque* processes, long long int clock) {
     assert(processes!=NULL);
     Node *curr = processes->head;
 
-    __int64_t num = 0;
+    long long int num = 0;
     while (curr!=NULL) {
         Process* curr_process = (Process *) curr->data;
         if (curr_process->arrival_time < clock && curr_process->finish_time == -1) {
@@ -122,7 +122,7 @@ void print_processes(Deque *processes) {
     printf("\npid      arrival      memory      jobtime      timeleft      finished      lastaccess\n");
     while (curr != NULL) {
         Process* curr_process = (Process *) curr->data;
-        printf("%-12ld%-12ld%-12ld%-12ld%-12ld%-12ld%-12ld\n", \
+        printf("%-12lld%-12lld%-12lld%-12lld%-12lld%-12lld%-12lld\n", \
         curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time, curr_process->finish_time, curr_process->last_access); 
         curr = curr->next; 
     } 
@@ -137,7 +137,7 @@ void print_processes_reversed(Deque *processes) {
     printf("\npid      arrival      memory      jobtime      timeleft      finished\n");
     while (curr != NULL) {
         Process* curr_process = (Process *) curr->data;
-        printf("%-12ld%-12ld%-12ld%-12ld%-12ld%-12ld\n", \
+        printf("%-12lld%-12lld%-12lld%-12lld%-12lld%-12lld\n", \
         curr_process->pid, curr_process->arrival_time, curr_process->mem_size, curr_process->job_time, curr_process->remaining_time, curr_process->finish_time); 
         curr = curr->prev; 
     } 
@@ -163,13 +163,13 @@ Node* next_running_process(Deque* processes) {
 void print_stats(Deque* processes) {
     assert(processes!=NULL);
 
-    __int64_t total_processes = 0;
-    __int64_t interval = 60;
-    __int64_t curr_throughput = 0;
-    __int64_t total_throughput = 0;
-    __int64_t min_throughput = __INT64_MAX__;
-    __int64_t max_throughput = 0;
-    __int64_t total_turnaround = 0;
+    long long int total_processes = 0;
+    long long int interval = 60;
+    long long int curr_throughput = 0;
+    long long int total_throughput = 0;
+    long long int min_throughput = __INT64_MAX__;
+    long long int max_throughput = 0;
+    long long int total_turnaround = 0;
     double total_overhead = 0;
     double max_overhead = 0;
 
@@ -205,7 +205,7 @@ void print_stats(Deque* processes) {
         }
 
         
-        __int64_t curr_turnaround = curr_process->finish_time - curr_process->arrival_time;
+        long long int curr_turnaround = curr_process->finish_time - curr_process->arrival_time;
         total_turnaround += curr_turnaround;
         
         double curr_overhead = (double) curr_turnaround / (double) curr_process->job_time;
@@ -218,10 +218,10 @@ void print_stats(Deque* processes) {
         curr = curr->next;
     }
 
-    printf("Throughput %ld, %ld, %ld\n", (total_processes + total_throughput - 1)/ (total_throughput), min_throughput, max_throughput);
-    printf("Turnaround time %ld\n", (total_turnaround + total_processes - 1) / (total_processes));
+    printf("Throughput %lld, %lld, %lld\n", (total_processes + total_throughput - 1)/ (total_throughput), min_throughput, max_throughput);
+    printf("Turnaround time %lld\n", (total_turnaround + total_processes - 1) / (total_processes));
     printf("Time overhead %.2f %.2f\n", max_overhead, total_overhead/total_processes);
-    printf("Makespan %ld\n", ((Process*)processes->tail->data)->finish_time);
+    printf("Makespan %lld\n", ((Process*)processes->tail->data)->finish_time);
         
 }
 
@@ -240,7 +240,7 @@ void sjf(Deque* processes) {
     Node* ptr = NULL;
     Node* lptr = NULL;
 
-    __int64_t swapped = 0;
+    long long int swapped = 0;
 
     if (head == NULL) {
         return;
@@ -274,7 +274,7 @@ void sort_pid(Deque* processes) {
     Node* ptr = NULL;
     Node* lptr = NULL;
 
-    __int64_t swapped = 0;
+    long long int swapped = 0;
 
     if (head == NULL) {
         return;
@@ -301,13 +301,13 @@ void sort_pid(Deque* processes) {
 }
 
 
-__int64_t least_used_id(Deque* processes, __int64_t running_id) {
+long long int least_used_id(Deque* processes, long long int running_id) {
 
     assert(processes!=NULL);
     Node* curr = processes->head;
 
-    __int64_t least_time = __INT64_MAX__;
-    __int64_t least_pid = 0;
+    long long int least_time = __INT64_MAX__;
+    long long int least_pid = 0;
 
     while (curr!=NULL) {
         Process* curr_process = ((Process *)curr->data);
@@ -321,13 +321,13 @@ __int64_t least_used_id(Deque* processes, __int64_t running_id) {
     return least_pid;
 }
 
-__int64_t recent_used_id(Deque* processes, __int64_t running_id) {
+long long int recent_used_id(Deque* processes, long long int running_id) {
 
     assert(processes!=NULL);
     Node* curr = processes->head;
 
-    __int64_t most_time = 0;
-    __int64_t most_pid = 0;
+    long long int most_time = 0;
+    long long int most_pid = 0;
 
     while (curr!=NULL) {
         Process* curr_process = ((Process *)curr->data);
@@ -342,7 +342,7 @@ __int64_t recent_used_id(Deque* processes, __int64_t running_id) {
 }
 
 
-void update_access(Deque* processes, __int64_t evicted_id) {
+void update_access(Deque* processes, long long int evicted_id) {
     assert(processes!=NULL);
     Node* curr = processes->head;
 

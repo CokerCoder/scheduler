@@ -7,25 +7,25 @@
 typedef struct process Process;
 struct process
 {
-    __int64_t arrival_time;
-    __int64_t pid;
-    __int64_t mem_size;
-    __int64_t job_time;
-    __int64_t remaining_time;
-    __int64_t finish_time;
-    __int64_t last_access;
+    long long int arrival_time;
+    long long int pid;
+    long long int mem_size;
+    long long int job_time;
+    long long int remaining_time;
+    long long int finish_time;
+    long long int last_access;
 };
 
-Process* new_process(__int64_t arrival_time, __int64_t pid, __int64_t mem_size, __int64_t job_time);
+Process* new_process(long long int arrival_time, long long int pid, long long int mem_size, long long int job_time);
 
 // Move the process with pid to the last possible position (after the process that has arrived the most recently)
-void move_to_last(Deque* processes, __int64_t pid, __int64_t clock);
+void move_to_last(Deque* processes, long long int pid, long long int clock);
 
 void print_processes(Deque *processes);
 void print_processes_reversed(Deque *processes);
 
 // Number of processes remaining before a given time
-__int64_t proc_remaining(Deque* processes, __int64_t clock);
+long long int proc_remaining(Deque* processes, long long int clock);
 // Next process should be running
 Node* next_running_process(Deque* processes);
 
@@ -38,11 +38,11 @@ void sjf(Deque* processes);
 // Sort the processes by pid if two or more processes arrived in the same time
 void sort_pid(Deque* processes);
 
-__int64_t least_used_id(Deque* processes, __int64_t running_id);
-__int64_t recent_used_id(Deque* processes, __int64_t running_id);
+long long int least_used_id(Deque* processes, long long int running_id);
+long long int recent_used_id(Deque* processes, long long int running_id);
 
 // Update the access time to -1 when evicted all of its pages or finished 
-void update_access(Deque* processes, __int64_t evicted_id);
+void update_access(Deque* processes, long long int evicted_id);
 
 
 #endif 
