@@ -170,8 +170,8 @@ void print_stats(Deque* processes) {
     long long int min_throughput = __INT64_MAX__;
     long long int max_throughput = 0;
     long long int total_turnaround = 0;
-    double total_overhead = 0;
-    double max_overhead = 0;
+    long double total_overhead = 0;
+    long double max_overhead = 0;
 
     Node *curr = processes->head;
 
@@ -208,7 +208,7 @@ void print_stats(Deque* processes) {
         long long int curr_turnaround = curr_process->finish_time - curr_process->arrival_time;
         total_turnaround += curr_turnaround;
         
-        double curr_overhead = (double) curr_turnaround / (double) curr_process->job_time;
+        long double curr_overhead = (long double) curr_turnaround / (long double) curr_process->job_time;
         total_overhead += curr_overhead;
         if (curr_overhead > max_overhead) {
             max_overhead = curr_overhead;
@@ -220,7 +220,7 @@ void print_stats(Deque* processes) {
 
     printf("Throughput %lld, %lld, %lld\n", (total_processes + total_throughput - 1)/ (total_throughput), min_throughput, max_throughput);
     printf("Turnaround time %lld\n", (total_turnaround + total_processes - 1) / (total_processes));
-    printf("Time overhead %.2f %.2f\n", max_overhead, total_overhead/total_processes);
+    printf("Time overhead %.2Lf %.2Lf\n", max_overhead, total_overhead/total_processes);
     printf("Makespan %lld\n", ((Process*)processes->tail->data)->finish_time);
         
 }
